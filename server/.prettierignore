@@ -1,0 +1,6 @@
+# Ignore standalone directory
+standalone/
+node_modules/
+.next/
+dist/
+build/ 

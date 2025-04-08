@@ -1,0 +1,23 @@
+{
+  "name": "kodex",
+  "version": "1.0.0",
+  "description": "Monorepo for Kodex - online code editor and executor platform",
+  "main": "index.js",
+  "scripts": {
+    "dev": "turbo run dev",
+    "test": "turbo run test",
+    "prepare": "husky"
+  },
+  "keywords": ["code-editor", "docker", "nextjs", "express", "monorepo"],
+  "author": "Virag Jain",
+  "license": "MIT",
+  "packageManager": "pnpm@10.7.1",
+  "devDependencies": {
+    "@commitlint/config-conventional": "^19.8.0",
+    "commitlint": "^19.8.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
+    "prettier": "^3.5.3",
+    "turbo": "^2.5.0"
+  }
+}

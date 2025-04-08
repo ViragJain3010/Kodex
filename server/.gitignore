@@ -1,0 +1,27 @@
+# Dependencies
+/node_modules
+/standalone/node_modules
+/temp
+/.pnp
+.pnp.*
+
+# Testing
+/coverage
+
+# Build output
+/build
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Env files
+*.env
+
+# TypeScript
+*.tsbuildinfo
