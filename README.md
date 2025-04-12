@@ -4,7 +4,7 @@
 
 ## Demo
 
-Check out the demonstration of the **Kodex Server** in action:
+Check out the demonstration of the **Kodex** in action:
 
 ![Kodex Server Demo](./assets/kodex-demo.gif)
 
@@ -26,55 +26,26 @@ Kodex/
 ## 🧰 Tech Stack
 
 ### Frontend (`client/`)
-- [Next.js](https://nextjs.org/)
+
+- Next.js
 - TailwindCSS
+- Jest + React Testing Library
 - ESLint + Prettier
 - Husky + lint-staged (Pre-commit hooks)
 
 ### Backend (`server/`)
-- [Express.js](https://expressjs.com/)
-- Docker (dynamic container-based code execution)
+
+- Express.js
+- Docker
 - Prisma (ORM)
-- Supertest (for integration testing)
-
-## 🚀 Local Development
-
-1. Clone the repository:
-   ```bash
-   git clone <repo-url>
-   cd Kodex
-   ```
-
-2. Install dependencies:
-   - Frontend:
-     ```bash
-     cd client && pnpm install
-     ```
-   - Backend:
-     ```bash
-     cd server && pnpm install
-     ```
-
-3. Set up Git hooks:
-   ```bash
-   pnpm run prepare
-   ```
-
-4. Start development servers:
-   - Frontend: `pnpm dev` in `client/`
-   - Backend: `pnpm dev` in `server/`
-
-## 🧪 Testing Strategy
-
-- **Unit tests**: Run locally during development
-- **Integration tests**: Run on every pull request (via GitHub Actions)
-- **End-to-end tests**: Run on every merge (CI/CD)
+- Vitest + Supertest
 
 ## 🤖 Git Workflow
 
 We enforce [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) using `commitlint`.
 
 ### Examples:
+
 ```
 feat(client): add code editor UI
 fix(server): handle null input in Docker exec
@@ -96,7 +67,6 @@ chore: update dependencies
 
 - GitHub Actions:
   - Runs tests, linting, and commit message checks on PRs
-- Independent deployments for `client` (e.g., Vercel/Railway) and `server` (e.g., AWS)
 
 ## 📁 Related Documentation
 
