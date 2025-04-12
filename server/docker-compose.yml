@@ -1,0 +1,51 @@
+# version: '3.8'
+
+services:
+  javascript-runner:
+    build:
+      context: ./docker/base 
+      dockerfile: ../javascript/Dockerfile  
+    image: code-executor-javascript
+    container_name: code-executor-javascript
+    security_opt:
+      - no-new-privileges
+    cap_drop:
+      - ALL
+    networks:
+      - code-network
+    volumes:
+      - ./temp:/app/temp 
+    tty: true
+    stdin_open: true
+
+  python-runner:
+    build:
+      context: ./docker/base
+      dockerfile: ../python/Dockerfile
+    image: code-executor-python
+    security_opt:
+      - no-new-privileges
+    cap_drop:
+      - ALL
+    networks:
+      - code-network
+    volumes:
+      - ./temp:/app/temp
+
+  cpp-runner:
+    build:
+      context: ./docker/base
+      dockerfile: ../cpp/Dockerfile
+    image: code-executor-cpp
+    security_opt:
+      - no-new-privileges
+    cap_drop:
+      - ALL
+    networks:
+      - code-network
+    volumes:
+      - ./temp:/app/temp
+
+networks:
+  code-network:
+    driver: bridge

@@ -1,0 +1,41 @@
+// prisma/schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABSE_URI")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum AuthProvider {
+  LOCAL
+  GOOGLE
+  GITHUB
+}
+
+model User {
+  id              String        @id @default(cuid())
+  username        String        @unique
+  email           String        @unique
+  password        String?       // Nullable for OAuth users
+  authProvider    AuthProvider  @default(LOCAL)
+  providerId      String?       // For OAuth provider user ID
+  
+  resetToken      String?
+  resetTokenExpiry DateTime?
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Snippet {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  code      String
+  language  String
+  output    String
+  input     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

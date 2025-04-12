@@ -1,0 +1,80 @@
+# # Colors
+# GREEN='\033[0;32m'
+# YELLOW='\033[0;33m'
+# RED='\033[0;31m'
+# BOLD='\033[1m'
+# NC='\033[0m' # No Color
+# PURPLE='\033[0;35m'
+
+# echo ""
+# echo "${BOLD}----->  Running Tests. All the Best 🫡${NC}"
+# echo ""
+
+# echo ""
+# echo "🧪  ${YELLOW}${BOLD}Task:${NC} ${YELLOW}Running client tests...${NC}"
+# echo ""
+
+# if pnpm --filter client test; then
+#   echo ""
+#   echo "${GREEN}✅  Response: Client tests passed successfully 🎉${NC}"
+#   echo ""
+# else
+#   echo ""
+#   echo "${RED}❌  ${BOLD}Response: ${RED}Client tests failed 💥${NC}"
+#   echo "${PURPLE}💡  ${BOLD}Tip: ${PURPLE}Run ${BOLD}'pnpm test:watch'${PURPLE} locally to debug the issue.${NC}"
+#   echo ""
+#   exit 1
+# fi
+
+# echo ""
+# echo "🧪  ${YELLOW}${BOLD}Task:${NC} ${YELLOW}Running server tests...${NC}"
+# echo ""
+
+# if pnpm --filter server test; then
+#   echo ""
+#   echo "${GREEN}✅  Response: Server tests passed successfully 🎉${NC}"
+#   echo ""
+# else
+#   echo ""
+#   echo "${RED}❌  ${BOLD}Response: ${RED}Server tests failed 🫠${NC}"
+#   echo "${PURPLE}💡  ${BOLD}Tip: ${PURPLE}Run ${BOLD}'pnpm test:watch'${PURPLE} locally to debug the issue.${NC}"
+#   echo ""
+#   exit 1
+# fi
+
+# echo ""
+
+# # Random Dev Wisdom
+# RANDOM_QUOTES="\
+# Writing tests is like doubting your ability to code. ☠️
+# Only Legends say - It works on my machine 🪦
+# Real devs push to main and pray. 🙏
+# Fast, good, cheap: pick any two. ⚖️
+# Nothing is as permanent as a temporary solution that works. ⚡
+# Programming is the art of adding bugs to an empty text file. 🐞
+# If one programmer can do it in one week, then 2 programmers can do it in 2 weeks. 💑
+# Just Imagine if I changed your theme to light mode. ☀️"
+
+# # Convert multi-line string to arguments
+# IFS='
+# '
+# set -- $RANDOM_QUOTES
+
+# # Get current time in seconds to simulate a random number
+# now=$(date +%s)
+# count=$#
+# index=$(expr $now % $count + 1)
+
+# # Print the chosen quote
+# i=1
+# for line; do
+#   if [ "$i" -eq "$index" ]; then
+#     echo "${PURPLE}💬  Dev Wisdom: ${BOLD}$line${NC}"
+#     break
+#   fi
+#   i=$((i + 1))
+# done
+
+# echo ""
+
+# exit 1

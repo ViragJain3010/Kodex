@@ -1,0 +1,28 @@
+# # Colors
+# GREEN='\033[0;32m'
+# YELLOW='\033[0;33m'
+# RED='\033[0;31m'
+# BOLD='\033[1m'
+# NC='\033[0m' # No Color
+# PURPLE='\033[0;35m'
+
+# echo ""
+# echo "${BOLD}----->  Running a quick check to see if the code is good to go? 🚀${NC}"
+# echo ""
+# echo "⚠️  ${YELLOW}${BOLD}Task: ${YELLOW} Running lint checks...${NC}"
+# echo ""
+
+# pnpm lint-staged || LINT_FAILED=$?
+
+# if [ -z "$LINT_FAILED" ]; then
+#   echo ""
+#   echo "${GREEN}✅ Response: All staged files have proper linting 😍.${NC}"
+#   echo ""
+#   exit 0
+# else
+#   echo ""
+#   echo "${RED}❌ ${BOLD}Response: ${RED}Looks like the code isn't linted 🫣${NC}"
+#   echo "${PURPLE}💝 ${BOLD}Tip: ${PURPLE}Run ${BOLD}'pnpm lint:fix'${PURPLE} to try auto-fixing the errors.${NC}"
+#   echo ""
+#   exit $LINT_FAILED
+# fi
