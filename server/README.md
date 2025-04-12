@@ -39,14 +39,34 @@ The **Kodex Server** is the backend service for the Kodex platform, handling cod
    - Create a `.env` file in the `kodex/server` directory based on the provided [.env.example](./env.example) template.
    - Configure environment variables for database connection, Docker settings, and other server options.
 
-4. **Build and Run Docker Containers:**
+4. **Configure Prisma-client**
+
+   - Make sure you have the `DATABSE_URI` variable in .env correctly setup.
+   - run `pnpm prisma generate` to intialise the prisma-client.
+
+5. **Build and Run Docker Containers:**
 
    ```bash
+   docker network create code-network
    docker compose build
    docker compose up   # For testing, if ran successfully then execute `docker compose down`
    ```
 
    > **Tip:** If you encounter errors,try restarting the terminal and rerun the commands.
+
+6. **Give permissions to program to create temp folder**
+
+   ```bash
+   sudo mkdir -p server/temp   # The temp directly should be inside server (/server/temp).
+   sudo chmod -R 777 server/temp
+   ```
+
+7. **Running the project**
+   ```bash
+    pnpm start  # to run the development server (we will need the client intialsed for this)
+    pnpm dev  # starts the build server (uses the build from client)
+   ```
+   Congratulations! The server is setup and running.
 
 ## Directory Structure
 
