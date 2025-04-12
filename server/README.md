@@ -7,7 +7,6 @@ The **Kodex Server** is the backend service for the Kodex platform, handling cod
 - [Requirements](#requirements)
 - [Setup](#setup)
 - [Directory Structure](#directory-structure)
-- [Running the Server](#running-the-server)
 - [API Endpoints](#api-endpoints)
 - [Docker Configuration](#docker-configuration)
 - [Middleware](#middleware)
@@ -16,7 +15,7 @@ The **Kodex Server** is the backend service for the Kodex platform, handling cod
 ## Requirements
 
 - **Node.js** (version 14 or higher)
-- **Docker** (with dynamic container management support)
+- **Docker** 
 - **Docker Compose**
 
 ## Setup
@@ -31,8 +30,11 @@ The **Kodex Server** is the backend service for the Kodex platform, handling cod
 2. **Install Dependencies:**
 
    ```bash
-   npm install
+   pnpm install
+   pnpm approve-builds  # Run this command to install the scripts successfully
    ```
+
+   > Some packages (like @prisma/client, esbuild, sharp, etc.) need to run native build steps or postinstall scripts (e.g., downloading binaries) during pnpm install. PNPM now requires explicit approval to prevent malicious scripts from auto-running.
 
 3. **Configure the Environment:**
 
@@ -54,17 +56,17 @@ The **Kodex Server** is the backend service for the Kodex platform, handling cod
 
    > **Tip:** If you encounter errors,try restarting the terminal and rerun the commands.
 
-6. **Give permissions to program to create temp folder**
+6. **Give permissions to the program to create the temp folder**
 
    ```bash
-   sudo mkdir -p server/temp   # The temp directly should be inside server (/server/temp).
+   sudo mkdir -p server/temp   # The temp directory should be inside server (/server/temp).
    sudo chmod -R 777 server/temp
    ```
 
 7. **Running the project**
    ```bash
-    pnpm start  # to run the development server (we will need the client intialsed for this)
-    pnpm dev  # starts the build server (uses the build from client)
+    pnpm start  # runs the development server (the client must be initialized for this)
+    pnpm dev    # starts the build server (uses the build from the client)
    ```
    Congratulations! The server is setup and running.
 
@@ -78,24 +80,6 @@ The **Kodex Server** is the backend service for the Kodex platform, handling cod
 - **`prisma/`**: Prisma ORM schema and client configuration.
 - **`standalone/`**: Standalone Next.js build for the frontend (used in production).
 - **`utils/`**: Utility functions and helper classes.
-
-## Running the Server
-
-- **Production Mode:**
-
-  ```bash
-  npm run dev
-  ```
-
-  Uses the frontend build in the `standalone` folder for testing.
-
-- **Devlopment Mode:**
-
-  ```bash
-  npm start
-  ```
-
-  Starts the backend server at `localhost:3001`. The frontend needs to be started separately in another terminal, after which it can communicate with the backend via API requests.
 
 ## API Endpoints
 
