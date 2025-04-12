@@ -16,8 +16,6 @@ Kodex/
 ├── server/         # Backend (Express.js + Docker)
 ├── .husky/         # Git hooks (precommit, commit-msg, etc.)
 ├── .github/        # GitHub Actions CI/CD workflows
-├── commitlint.config.js
-├── README.md       # This file
 └── ...
 ```
 
