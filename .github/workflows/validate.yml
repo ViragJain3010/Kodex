@@ -48,7 +48,7 @@ jobs:
         run: pnpm install
 
       - name: Run ESLint
-        run: pnpm lint
+        run: pnpm lint:check
 
   test-client:
     name: Test Client
@@ -98,7 +98,7 @@ jobs:
         run: pnpm install
 
       - name: Run ESLint
-        run: pnpm lint
+        run: pnpm lint:check
 
   test-server:
     name: Test Server

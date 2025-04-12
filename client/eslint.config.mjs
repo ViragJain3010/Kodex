@@ -45,6 +45,6 @@ export default [
     },
   },
   {
-    ignores: ['**/node_modules/**', '**/standalone/**', '.next/**', 'out/**'],
+    ignores: ['**/node_modules/**', '**/standalone/**', '.next/**', 'out/**', 'pnpm-lock.yaml'],
   },
 ];

@@ -1,10 +1,4 @@
 {
-  "client/**/*.{js,jsx,ts,tsx}": [
-    "pnpm --filter ./client lint:check",
-    "pnpm --filter ./client format:check"
-  ],
-  "server/**/*.{js,ts}": [
-    "pnpm --filter ./server lint:check",
-    "pnpm --filter ./server format:check"
-  ]
+  "client/**/*.{js,jsx,ts,tsx}": ["pnpm --filter ./client lint:check"],
+  "server/**/*.{js,ts}": ["pnpm --filter ./server lint:check"]
 }
