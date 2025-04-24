@@ -23,13 +23,17 @@ Kodex/
 
 ## 🧰 Tech Stack
 
+### Root
+- Husky + lint-staged (Pre-commit hooks)
+- Turbo 
+- commitlint + commitzen (Git message wizard)
+  
 ### Frontend (`client/`)
 
 - Next.js
 - TailwindCSS
 - Jest + React Testing Library
 - ESLint + Prettier
-- Husky + lint-staged (Pre-commit hooks)
 
 ### Backend (`server/`)
 
