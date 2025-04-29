@@ -5,15 +5,24 @@ import CppExecutor from './cpp/index.js';
 
 class ExecutorFactory {
   static getExecutor(language) {
-    switch (language.toLowerCase()) {
-      case 'javascript':
-        return new JavaScriptExecutor();
-      case 'python':
-        return new PythonExecutor();
-      case 'cpp':
-        return new CppExecutor();
-      default:
-        throw new Error(`Unsupported language: ${language}`);
+    if (!language) {
+      throw new Error('Language parameter is required');
+    }
+
+    try {
+      switch (language.toLowerCase()) {
+        case 'javascript':
+          return new JavaScriptExecutor();
+        case 'python':
+          return new PythonExecutor();
+        case 'cpp':
+          return new CppExecutor();
+        default:
+          throw new Error(`Unsupported language: ${language}`);
+      }
+    } catch (error) {
+      // Wrap any error with context
+      throw new Error(`Error creating executor for language '${language}': ${error.message}`);
     }
   }
 }

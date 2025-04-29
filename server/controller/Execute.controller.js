@@ -8,6 +8,14 @@ export const executeController = async (req, res) => {
   try {
     const { slug, language, code, input = '' } = req.body;
 
+    if (!language) {
+      throw new Error('Language parameter is required');
+    }
+
+    if (!code) {
+      throw new Error('Code parameter is required');
+    }
+
     // Get appropriate executor
     const executor = ExecutorFactory.getExecutor(language);
 
@@ -33,6 +41,7 @@ export const executeController = async (req, res) => {
     // chunks end here--------------------------------------------
 
     // original method to send the response in one go
+    console.log("node env: ", process.env.NODE_ENV);
     if (slug) {
       const response = await snippetController.createSnippet(
         slug,
@@ -52,7 +61,7 @@ export const executeController = async (req, res) => {
     } else {
       res.status(200).json({
         success: result.success,
-        saveSuccess: 'No Slug provided',
+        saveSuccess: false,
         path: 'at server/api/routes/execute.js/try()',
         output: result.output,
         error: result.error,
@@ -64,7 +73,7 @@ export const executeController = async (req, res) => {
     res.status(500).json({
       success: false,
       path: 'at server/api/routes/execute.js/catch()',
-      error: 'Execution failed',
+      error: "Execution failed: " + error.message,
       details: process.env.NODE_ENV === 'development' ? error.message : undefined,
     });
   }

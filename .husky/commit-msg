@@ -26,7 +26,7 @@
 #   echo "${GREEN}✅  Response: Commit message looks good ✌️.${NC}"
 #   echo "${PURPLE}${BOLD}🎊  You can try pushing your changes now! 🎊${NC}"
 #   echo ""
-#   exit 1
+#   exit 0
 # else
 #   echo ""
 #   echo "${RED}❌ ${BOLD}Response: ${RED}Commit message failed validation.${NC}"
@@ -35,4 +35,3 @@
 #   exit 1
 # fi
 
-# exit 1 # Keep this for dev if you want to prevent actual commits (temporary guard)

@@ -47,7 +47,7 @@
 # # Random Dev Wisdom
 # RANDOM_QUOTES="\
 # Writing tests is like doubting your ability to code. ☠️
-# Only Legends say - It works on my machine 🪦
+# Just say - It works on my machine and move on. 🪦
 # Real devs push to main and pray. 🙏
 # Fast, good, cheap: pick any two. ⚖️
 # Nothing is as permanent as a temporary solution that works. ⚡
@@ -76,5 +76,3 @@
 # done
 
 # echo ""
-
-# exit 1

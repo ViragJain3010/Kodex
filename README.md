@@ -8,6 +8,10 @@ Check out the demonstration of the **Kodex** in action:
 
 ![Kodex Server Demo](./assets/kodex-demo.gif)
 
+> **Note**: The frontend of Kodex is deployed and accessible online here. The backend, which handles secure code execution using Docker containers, is not deployed publicly due to the lack of free hosting platforms that support Docker Compose. For a complete demonstration, including backend functionalities, please refer to the demo video or run the application locally as per the instructions below.
+
+## Features
+
 ## 📂 Project Structure
 
 ```
