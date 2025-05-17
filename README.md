@@ -1,4 +1,4 @@
-> Important: Due to limitations of AWS instance on the free tier, you will get an error while trying to execute the code.
+> ⚠️ Important: Due to limitations of AWS instance on the free tier, you will get an error while trying to execute the code on current deployment.
 
 # Kodex
 
