@@ -1,3 +1,5 @@
+> Important: Due to limitations of AWS instance on the free tier, you will get an error while trying to execute the code.
+
 # Kodex
 
 **Kodex** is a web-based code execution platform designed to provide real-time code editing, execution, and terminal-like interactivity across multiple programming languages. This monorepo hosts both the frontend (Next.js) and backend (Express.js + Docker) components.
