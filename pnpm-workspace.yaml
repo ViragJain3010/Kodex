@@ -1,3 +1,11 @@
 packages:
-  - 'client'
-  - 'server'
+  - client
+  - server
+onlyBuiltDependencies:
+  - '@prisma/client'
+  - '@prisma/engines'
+  - cpu-features
+  - esbuild
+  - prisma
+  - sharp
+  - ssh2
