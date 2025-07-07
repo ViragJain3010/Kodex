@@ -51,7 +51,6 @@ export default function DevNotesModal({ isPageLoaded }) {
               <p>Welcome to our online code editor! Here are some key features:</p>
               <ul className="list-disc list-inside space-y-2">
                 <li>Support for multiple programming languages</li>
-                <li>Customizable themes</li>
                 <li>Resizable layout</li>
                 <li>URL based Code Sharing</li>
                 <li>Real-time collaboration (coming soon)</li>
@@ -62,14 +61,7 @@ export default function DevNotesModal({ isPageLoaded }) {
               <p>Here are some known issues with the current deployment:</p>
               <ul className="list-disc list-outside ml-4 space-y-2">
                 <li>
-                  The free tier of the hosting platform does not support{' '}
-                  <strong>Docker Compose</strong>, which prevents code execution. While there is a
-                  workaround available, it is suboptimal and non-optimized.
-                </li>
-                <li>
-                  On some initial visits, the loader may not disappear even after the content has
-                  fully loaded. This issue arises from a bug in the{' '}
-                  <strong>monaco-editor/react</strong> library.
+                  Currently, the backend server is down due to <b className='text-red-500'>AWS Free Tier</b> usage limitations. This means that code execution and other backend functionalities are temporarily unavailable.
                 </li>
               </ul>
             </>
@@ -89,15 +81,15 @@ export default function DevNotesModal({ isPageLoaded }) {
                 onClick={handleClose}
                 className="w-full bg-green-600 text-white hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-sm sm:text-base"
               >
-                Ready! Action!
+                Proceed to Editor
               </Button>
-              <Button
+              {/* <Button
                 variant="outline"
                 onClick={() => window.open('https://github.com/yourusername/your-repo', '_blank')}
                 className="w-full flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 text-sm sm:text-base"
               >
                 Show me the workaround <ExternalLink className=" h-4 w-4" />
-              </Button>
+              </Button> */}
             </>
           )}
         </CardFooter>
