@@ -1,5 +1,5 @@
 // server/controllers/Auth.controller.js
-import { PrismaClient } from '@prisma/client';
+import prisma from '../config/prisma.js';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import {
@@ -9,7 +9,7 @@ import {
 } from '../config/jwt.config.js';
 import { sendPasswordResetEmail } from '../services/Email.Service.js';
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 export const authController = {
   async signup(req, res) {

@@ -1,26 +1,26 @@
 
-# # Colors
-# GREEN='\033[0;32m'
-# YELLOW='\033[0;33m'
-# BOLD='\033[1m'
-# NC='\033[0m' # No Color
-# PURPLE='\033[0;35m'
+# Colors
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BOLD='\033[1m'
+NC='\033[0m' # No Color
+PURPLE='\033[0;35m'
 
-# # If commit message already exicreatests (e.g., via `git commit -m`), skip prompt
-# if [ "$2" = "message" ]; then
-#   echo ""
-#   echo "${YELLOW}⚠️  Skipping commit prompt UI (custom message detected).${NC}"
-#   echo ""
-#   exit 0
-# fi
+# If commit message already exicreatests (e.g., via `git commit -m`), skip prompt
+if [ "$2" = "message" ]; then
+  echo ""
+  echo "${YELLOW}⚠️  Skipping commit prompt UI (custom message detected).${NC}"
+  echo ""
+  exit 0
+fi
 
-# echo ""
-# echo "💬 ${YELLOW}${BOLD}Task:${NC} ${YELLOW} Launching commit prompt...${NC}"
-# echo ""
-# echo "${PURPLE}🧙 This wizard will help you craft a standardized commit message. (use git commit -m to skip this wizard)${NC}"
-# echo ""
-# exec < /dev/tty && pnpm cz --hook || true
-# echo ""
-# echo "${GREEN}✅ Response: Commit message created ✨.${NC}"
+echo ""
+echo "💬 ${YELLOW}${BOLD}Task:${NC} ${YELLOW} Launching commit prompt...${NC}"
+echo ""
+echo "${PURPLE}🧙 This wizard will help you craft a standardized commit message. (use git commit -m to skip this wizard)${NC}"
+echo ""
+exec < /dev/tty && pnpm cz --hook || true
+echo ""
+echo "${GREEN}✅ Response: Commit message created ✨.${NC}"
 
-# exit 0
+exit 0

@@ -4,15 +4,12 @@
 import app from './api/index.js';
 import path from 'path';
 import fs from 'fs';
-import { PrismaClient } from '@prisma/client';
+import prisma from './config/prisma.js';
 
 // Get the current directory using import.meta.url
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 const PORT = process.env.PORT || 3001;
-
-// Initialize Prisma Client
-const prisma = new PrismaClient();
 
 // Create temp directory for code files if it doesn't exist
 const tempDir = path.join(__dirname, 'temp');

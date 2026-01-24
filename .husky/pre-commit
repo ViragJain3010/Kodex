@@ -1,28 +1,61 @@
-# # Colors
-# GREEN='\033[0;32m'
-# YELLOW='\033[0;33m'
-# RED='\033[0;31m'
-# BOLD='\033[1m'
-# NC='\033[0m' # No Color
-# PURPLE='\033[0;35m'
+# Colors
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
+BOLD='\033[1m'
+NC='\033[0m' # No Color
+PURPLE='\033[0;35m'
 
-# echo ""
-# echo "${BOLD}----->  Running a quick check to see if the code is good to go? 🚀${NC}"
-# echo ""
-# echo "⚠️  ${YELLOW}${BOLD}Task: ${YELLOW} Running lint checks...${NC}"
-# echo ""
+echo ""
+echo "${BOLD}----->  Running a quick check to see if the code is good to go? 🚀${NC}"
+echo ""
+echo "⚠️  ${YELLOW}${BOLD}Task: ${YELLOW} Running lint checks...${NC}"
+echo ""
 
-# pnpm lint-staged || LINT_FAILED=$?
+pnpm lint-staged || LINT_FAILED=$?
 
-# if [ -z "$LINT_FAILED" ]; then
-#   echo ""
-#   echo "${GREEN}✅ Response: All staged files have proper linting 😍.${NC}"
-#   echo ""
-#   exit 0
-# else
-#   echo ""
-#   echo "${RED}❌ ${BOLD}Response: ${RED}Looks like the code isn't linted 🫣${NC}"
-#   echo "${PURPLE}💝 ${BOLD}Tip: ${PURPLE}Run ${BOLD}'pnpm lint:fix'${PURPLE} to try auto-fixing the errors.${NC}"
-#   echo ""
-#   exit $LINT_FAILED
-# fi
+if [ -z "$LINT_FAILED" ]; then
+  echo ""
+  echo "${GREEN}✅ Response: All staged files have proper linting 😍.${NC}"
+  echo ""
+  exit 0
+else
+  echo ""
+  echo "${RED}❌ ${BOLD}Response: ${RED}Looks like the code isn't linted 🫣${NC}"
+  echo "${PURPLE}💝 ${BOLD}Tip: ${PURPLE}Run ${BOLD}'pnpm lint'${PURPLE} to try auto-fixing the errors.${NC}"
+  echo ""
+  exit $LINT_FAILED
+fi
+
+# Random Dev Wisdom
+RANDOM_QUOTES="\
+Writing tests is like doubting your ability to code. ☠️
+Only Legends say - It works on my machine 🪦
+Real devs push to main and pray. 🙏
+Fast, good, cheap: pick any two. ⚖️
+Nothing is as permanent as a temporary solution that works. ⚡
+Programming is the art of adding bugs to an empty text file. 🐞
+If one programmer can do it in one week, then 2 programmers can do it in 2 weeks. 💑
+Just Imagine if I changed your theme to light mode. ☀️"
+
+# Convert multi-line string to arguments
+IFS='
+'
+set -- $RANDOM_QUOTES
+
+# Get current time in seconds to simulate a random number
+now=$(date +%s)
+count=$#
+index=$(expr $now % $count + 1)
+
+# Print the chosen quote
+i=1
+for line; do
+  if [ "$i" -eq "$index" ]; then
+    echo "${PURPLE}💬  Dev Wisdom: ${BOLD}$line${NC}"
+    break
+  fi
+  i=$((i + 1))
+done
+
+echo ""

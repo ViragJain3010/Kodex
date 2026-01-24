@@ -1,4 +1,4 @@
 node_modules
 .env
 .turbo
-pnpm-worskspace.yaml
+pnpm-workspace.yaml

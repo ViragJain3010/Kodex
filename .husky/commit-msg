@@ -1,38 +1,37 @@
-# # Colors
-# GREEN='\033[0;32m'
-# YELLOW='\033[0;33m'
-# RED='\033[0;31m'
-# BOLD='\033[1m'
-# NC='\033[0m' # No Color
-# PURPLE='\033[0;35m'
+# Colors
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
+BOLD='\033[1m'
+NC='\033[0m' # No Color
+PURPLE='\033[0;35m'
 
-# echo ""
-# echo "${YELLOW}${BOLD}Task:${NC} ${YELLOW}Validating commit message...${NC}"
-# echo ""
+echo ""
+echo "${YELLOW}${BOLD}Task:${NC} ${YELLOW}Validating commit message...${NC}"
+echo ""
 
-# COMMIT_MSG_FILE="$1"
+COMMIT_MSG_FILE="$1"
 
-# # Check for functional emptiness (no real content)
-# if ! grep -qvE '^\s*#|^\s*$' "$COMMIT_MSG_FILE"; then
-#   echo "${RED}❌ ${BOLD}Response: ${RED}Empty or comment-only commit message detected. Commit aborted.${NC}"
-#   echo "${PURPLE}💡 ${BOLD}Tip: ${PURPLE}Use ${BOLD}'git commit'${PURPLE} to launch the commit wizard, or ${BOLD}-m${PURPLE} to pass a message directly.${NC}"
-#   echo ""
-#   exit 1
-# fi
+# Check for functional emptiness (no real content)
+if ! grep -qvE '^\s*#|^\s*$' "$COMMIT_MSG_FILE"; then
+  echo "${RED}❌ ${BOLD}Response: ${RED}Empty or comment-only commit message detected. Commit aborted.${NC}"
+  echo "${PURPLE}💡 ${BOLD}Tip: ${PURPLE}Use ${BOLD}'git commit'${PURPLE} to launch the commit wizard, or ${BOLD}-m${PURPLE} to pass a message directly.${NC}"
+  echo ""
+  exit 1
+fi
 
-# # ✅ Run commitlint
-# if pnpm commitlint --edit "$COMMIT_MSG_FILE"; then
-#   echo ""
-#   echo "${GREEN}✅  Response: Commit message looks good ✌️.${NC}"
-#   echo "${PURPLE}${BOLD}🎊  You can try pushing your changes now! 🎊${NC}"
-#   echo ""
-#   exit 1
-# else
-#   echo ""
-#   echo "${RED}❌ ${BOLD}Response: ${RED}Commit message failed validation.${NC}"
-#   echo "${PURPLE}💡 ${BOLD}Tip: ${PURPLE}Follow the format: ${BOLD}type(scope): subject ${PURPLE}or use the commit wizard 🧙 (use ${BOLD}'git commit'${PURPLE} to launch the commit wizard).${NC}"
-#   echo ""
-#   exit 1
-# fi
+# ✅ Run commitlint
+if pnpm commitlint --edit "$COMMIT_MSG_FILE"; then
+  echo ""
+  echo "${GREEN}✅  Response: Commit message looks good ✌️.${NC}"
+  echo "${PURPLE}${BOLD}🎊  You can try pushing your changes now! 🎊${NC}"
+  echo ""
+else
+  echo ""
+  echo "${RED}❌ ${BOLD}Response: ${RED}Commit message failed validation.${NC}"
+  echo "${PURPLE}💡 ${BOLD}Tip: ${PURPLE}Follow the format: ${BOLD}type(scope): subject ${PURPLE}or use the commit wizard 🧙 (use ${BOLD}'git commit'${PURPLE} to launch the commit wizard).${NC}"
+  echo ""
+  exit 1
+fi
 
-# exit 1 # Keep this for dev if you want to prevent actual commits (temporary guard)
+exit 0

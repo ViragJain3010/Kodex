@@ -1,4 +1,4 @@
 {
-  "client/**/*.{js,jsx,ts,tsx}": ["pnpm --filter ./client lint:check"],
-  "server/**/*.{js,ts}": ["pnpm --filter ./server lint:check"]
+  "client/**/*.{js,jsx,ts,tsx}": ["pnpm --filter ./client exec eslint --quiet", "pnpm --filter ./client exec prettier --check"],
+  "server/**/*.{js,ts}": ["pnpm --filter ./server exec eslint --quiet", "pnpm --filter ./server exec prettier --check"]
 }

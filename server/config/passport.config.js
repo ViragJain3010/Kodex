@@ -3,7 +3,7 @@ import passport from 'passport';
 // import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 // import { Strategy as GitHubStrategy } from "passport-github2";
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-// import { PrismaClient } from '@prisma/client';
+import prisma from './prisma.js';
 
 // const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';

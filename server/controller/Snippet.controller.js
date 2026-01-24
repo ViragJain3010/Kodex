@@ -1,7 +1,5 @@
 // server/controllers/Snippet.controller.js
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '../config/prisma.js';
 
 export const snippetController = {
   async createSnippet(slug, code, language, input, output) {
