@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log
+Dockerfile
+.dockerignore
+.git
+.gitignore
+.env
+temp
+dist
+build
+.DS_Store
+scripts/build_and_push.sh

@@ -5,6 +5,8 @@ import eslintPluginJest from 'eslint-plugin-jest';
 
 export default [
   js.configs.recommended,
+  pluginReact.configs.flat.recommended,
+  pluginReact.configs.flat['jsx-runtime'],
   {
     files: ['**/*.{js,mjs,cjs,jsx}'],
     languageOptions: {
@@ -20,12 +22,14 @@ export default [
         },
       },
     },
-    plugins: {
-      react: pluginReact,
-    },
     rules: {
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
     },
   },
   {
@@ -45,6 +49,13 @@ export default [
     },
   },
   {
-    ignores: ['**/node_modules/**', '**/standalone/**', '.next/**', 'out/**', 'pnpm-lock.yaml'],
+    ignores: [
+      '**/node_modules/**',
+      '**/standalone/**',
+      '.next/**',
+      'out/**',
+      'build/**',
+      'pnpm-lock.yaml',
+    ],
   },
 ];

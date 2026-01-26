@@ -1,10 +1,10 @@
 // server/controllers/Snippet.controller.js
-import prisma from '../config/prisma.js';
+import Snippet from '../models/Snippet.model.js';
 
 export const snippetController = {
   async createSnippet(slug, code, language, input, output) {
     try {
-      await prisma.snippet.upsert({
+      await Snippet.upsert({
         where: { slug },
         update: {
           code,
@@ -40,7 +40,7 @@ export const snippetController = {
   async getSnippet(req, res) {
     try {
       const { slug } = req.params;
-      const snippet = await prisma.snippet.findUnique({
+      const snippet = await Snippet.findUnique({
         where: { slug },
       });
       res.json(snippet).status(200);
@@ -53,7 +53,7 @@ export const snippetController = {
   async isSlugAvailable(req, res) {
     try {
       const { slug } = req.params;
-      const snippet = await prisma.snippet.findUnique({
+      const snippet = await Snippet.findUnique({
         where: {
           slug,
         },

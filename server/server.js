@@ -4,24 +4,29 @@
 import app from './api/index.js';
 import path from 'path';
 import fs from 'fs';
-import prisma from './config/prisma.js';
+import db from './config/db.js';
+
+import { fileURLToPath } from 'url';
 
 // Get the current directory using import.meta.url
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 3001;
 
 // Create temp directory for code files if it doesn't exist
 const tempDir = path.join(__dirname, 'temp');
 if (!fs.existsSync(tempDir)) {
-  fs.mkdirSync(tempDir);
+  fs.mkdirSync(tempDir, { recursive: true });
 }
+// Ensure the temp directory remains accessible to runner containers
+fs.chmodSync(tempDir, 0o777);
 
 // Function to start the server
 async function startServer() {
   // Connect to the database
   try {
-    await prisma.$connect();
+    await db.raw('SELECT 1');
     console.log('Connected to the database successfully!');
   } catch (error) {
     console.error('Database connection failed:', error);
@@ -41,7 +46,7 @@ async function cleanup() {
   if (fs.existsSync(tempDir)) {
     fs.rmSync(tempDir, { recursive: true, force: true });
   }
-  await prisma.$disconnect(); // disconnect Prisma
+  await db.destroy(); // Destroy Knex connection pool
   console.log('Cleanup completed. Exiting.');
   process.exit(0);
 }

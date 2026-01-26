@@ -13,17 +13,19 @@
     "test:ui": "turbo vitest -- --ui",
     "test:coverage": "turbo vitest -- --coverage run",
     "test:ci": "turbo run vitest -- run",
-    "vitest": "vitest"
+    "vitest": "vitest",
+    "migrate:latest": "knex migrate:latest",
+    "migrate:rollback": "knex migrate:rollback",
+    "migrate:make": "knex migrate:make"
   },
   "dependencies": {
-    "@prisma/client": "^7.3.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dockerode": "^4.0.9",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
-    "fs": "0.0.1-security",
     "jsonwebtoken": "^9.0.3",
+    "knex": "^3.1.0",
     "nodemailer": "^7.0.12",
     "passport": "^0.7.0",
     "passport-github2": "^0.1.12",
@@ -31,6 +33,7 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
+    "pg": "^8.17.2",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
@@ -39,7 +42,6 @@
     "@vitest/ui": "^4.0.18",
     "eslint": "^9.39.2",
     "globals": "^17.1.0",
-    "prisma": "^7.3.0",
     "supertest": "^7.2.2",
     "vitest": "^4.0.18"
   }

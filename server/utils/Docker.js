@@ -1,5 +1,5 @@
-// server/utils/docker.js
 import Docker from 'dockerode';
+import { fileURLToPath } from 'url';
 import fs from 'fs/promises';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
@@ -37,33 +37,51 @@ class DockerRunner {
     const { docker: dockerConfig, execution, settings } = languageConfig;
 
     // Create temporary directory for code
-    const __dirname = path.dirname(new URL(import.meta.url).pathname);
-    const codeDir = path.join(__dirname, '..', 'temp', containerId);
-    await fs.mkdir(codeDir, { recursive: true });
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const containerCodeDir = path.join(__dirname, '..', 'temp', containerId);
+    await fs.mkdir(containerCodeDir, { recursive: true });
+    // Ensure the directory is accessible by the runner container user (non-root)
+    await fs.chmod(containerCodeDir, 0o777);
+
+    // For Docker-outside-of-Docker, we need to bind the HOST path, not the container path
+    const hostWorkDir = process.env.HOST_WORK_DIR;
+    const hostCodeDir = hostWorkDir
+      ? path.join(hostWorkDir, 'temp', containerId)
+      : containerCodeDir;
+
+    console.log(
+      `Execution Environment: ${hostWorkDir ? 'Production (DinD)' : 'Development (Local)'}`
+    );
+    console.log(`Mounting host path: ${hostCodeDir} to container path: /app`);
 
     // Write code and input files
-    const codePath = path.join(codeDir, `${execution.filePrefix}${languageConfig.extension}`);
+    const codePath = path.join(
+      containerCodeDir,
+      `${execution.filePrefix}${languageConfig.extension}`
+    );
     await fs.writeFile(codePath, code);
     await fs.chmod(codePath, 0o777);
 
     if (input) {
-      const inputPath = path.join(codeDir, 'input.txt');
+      const inputPath = path.join(containerCodeDir, 'input.txt');
       await fs.writeFile(inputPath, input);
       await fs.chmod(inputPath, 0o777);
     }
 
     // Convert memory string to bytes
     const memoryBytes = this.convertMemoryToBytes(dockerConfig.memory);
-    // console.log(
-    //   `Converting memory limit ${dockerConfig.memory} to ${memoryBytes} bytes`
-    // );
 
-    // console.log("Execution: ", execution);
-    // console.log(execution.compileCommand)
+    // Construct full image name with username if available
+    const dockerUsername = process.env.DOCKER_USERNAME;
+    const fullImageName = dockerUsername
+      ? `${dockerUsername}/${dockerConfig.image}`
+      : dockerConfig.image;
+    const imageTag = `${fullImageName}:latest`;
 
     // Container configuration
     const containerConfig = {
-      Image: dockerConfig.image + ':latest',
+      Image: imageTag,
       Cmd: settings.requiresCompilation
         ? ['compile', `${execution.compileCommand}`, `${execution.command}`]
         : [execution.command, `${execution.filePrefix}${languageConfig.extension}`],
@@ -71,41 +89,28 @@ class DockerRunner {
       HostConfig: {
         Memory: memoryBytes,
         NanoCpus: Math.floor(parseFloat(dockerConfig.cpus) * 1e9),
-        Binds: [`${codeDir}:/app`],
-        AutoRemove: false, // if set true => Docker execution error: Error: (HTTP code 409) unexpected - can not get logs from container which is dead or marked for removal
-        NetworkMode: 'code-network',
+        Binds: [`${hostCodeDir}:/app`],
+        AutoRemove: false, // if set true => Docker error: (HTTP code 409) unexpected - can not get logs from container which is dead or marked for removal
+        NetworkMode: process.env.DOCKER_NETWORK || 'code-network',
       },
     };
 
-    // console.log("Container config:", JSON.stringify(containerConfig, null, 2));
-
-    // console.log('Available Docker images:');
-    // const images = await this.docker.listImages();
-    // console.log(images.map(img => ({
-    //   RepoTags: img.RepoTags,
-    //   Id: img.Id
-    // })));
-
     const images = await this.docker.listImages();
-    // console.log(images)
-    const imageExists = images.some(
-      img => img.RepoTags && img.RepoTags.includes(`${dockerConfig.image}:latest`)
-    );
+    const imageExists = images.some(img => img.RepoTags && img.RepoTags.includes(imageTag));
 
     if (!imageExists) {
-      console.log(`Image ${dockerConfig.image} not found locally, attempting to pull...`);
+      console.log(`Image ${imageTag} not found locally, attempting to pull...`);
       try {
-        console.log(`Pulling image ${dockerConfig.image}:latest`);
-        await this.docker.pull(`${dockerConfig.image}:latest`);
+        console.log(`Pulling image ${imageTag}`);
+        await this.docker.pull(imageTag);
       } catch (pullError) {
-        console.log(`Failed to pull image ${dockerConfig.image}:`, pullError);
-        throw new Error(`Failed to find or pull image ${dockerConfig.image}: ${pullError.message}`);
+        console.log(`Failed to pull image ${imageTag}:`, pullError);
+        throw new Error(`Failed to find or pull image ${imageTag}: ${pullError.message}`);
       }
     }
-    // console.log('Image exists:', imageExists);
 
     const container = await this.docker.createContainer(containerConfig);
-    return { container, codeDir, codePath };
+    return { container, codeDir: containerCodeDir, codePath };
   }
 
   async runCode(languageConfig, code, input = '') {

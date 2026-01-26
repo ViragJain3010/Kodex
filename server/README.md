@@ -1,6 +1,6 @@
 # Kodex Server
 
-The **Server** is the backend service for the Kodex platform, handling code execution, API requests, and database interactions. Built with **Express.js**, **Docker**, and **Prisma**, it supports dynamic, multi-language code execution environments and integrates seamlessly with the **Client**.
+The **Server** is the backend service for the Kodex platform, handling code execution, API requests, and database interactions. Built with **Express.js**, **Docker**, and **Knex + pg**, it supports dynamic, multi-language code execution environments and integrates seamlessly with the **Client**.
 
 ## Table of Contents
 
@@ -34,17 +34,20 @@ The **Server** is the backend service for the Kodex platform, handling code exec
    pnpm approve-builds  # Run this command to install the scripts successfully
    ```
 
-   > Some packages (like @prisma/client, esbuild, sharp, etc.) need to run native build steps or postinstall scripts (e.g., downloading binaries) during pnpm install. PNPM now requires explicit approval to prevent malicious scripts from auto-running.
+   > Some packages need to run native build steps or postinstall scripts during pnpm install. PNPM now requires explicit approval to prevent malicious scripts from auto-running.
 
 3. **Configure the Environment:**
 
    - Create a `.env` file in the `kodex/server` directory based on the provided [.env.example](./env.example) template.
    - Configure environment variables for database connection, Docker settings, and other server options.
 
-4. **Configure Prisma-client**
+4. **Database Migrations**
 
-   - Make sure you have the `DATABSE_URI` variable in .env correctly setup.
-   - run `pnpm prisma generate` to intialise the prisma-client.
+   - Make sure you have the `DATABASE_URI` variable in `.env` correctly setup.
+   - Run the following command to apply database migrations and set up the tables:
+     ```bash
+     pnpm migrate:latest
+     ```
 
 5. **Build and Run Docker Containers:**
 
@@ -54,7 +57,7 @@ The **Server** is the backend service for the Kodex platform, handling code exec
    docker compose up   # For testing, if ran successfully then execute `docker compose down`
    ```
 
-   > **Tip:** If you encounter errors,try restarting the terminal and rerun the commands.
+   > **Tip:** If you encounter errors, try restarting the terminal and rerun the commands.
 
 6. **Give permissions to the program to create the temp folder**
 
@@ -65,21 +68,23 @@ The **Server** is the backend service for the Kodex platform, handling code exec
 
 7. **Running the project**
    ```bash
-    pnpm start  # runs the development server (the client must be initialized for this)
-    pnpm dev    # starts the build server (uses the build from the client)
+    pnpm dev    # runs the development server
    ```
    Congratulations! The server is setup and running.
 
 ## Directory Structure
 
 - **`api/`**: Express routes for handling API requests.
-- **`config/`**: Configuration files.
-- **`docker/`**: Dockerfile and related configuration files
+- **`config/`**: Configuration files (database, passport, etc.).
+- **`controller/`**: Logic for handling API requests.
+- **`docker/`**: Dockerfile and related configuration files.
 - **`executors/`**: Code execution logic for supported programming languages.
 - **`middleware/`**: Custom Express middleware functions.
-- **`prisma/`**: Prisma ORM schema and client configuration.
+- **`migrations/`**: Knex database migration files.
+- **`models/`**: Database models and query logic (replaces Prisma client usage).
 - **`standalone/`**: Standalone Next.js build for the frontend (used in production).
 - **`utils/`**: Utility functions and helper classes.
+- **`knexfile.js`**: Knex configuration for different environments.
 
 ## API Endpoints
 
@@ -129,29 +134,29 @@ Docker dynamically creates and manages containers for secure, isolated code exec
     ```
     `code-network` is the name of the network used in your docker-compose.yml file. You can replace it with any other name, but ensure consistency in your configuration.
 
-<!-- ## Prisma Setup
+## Database Management (Knex)
 
-Prisma is used for seamless database interactions.
+Knex is used for schema management and query building.
 
-- **Schema Location:** `prisma/schema.prisma`
-- **Client Configuration:** Generated in `node_modules/.prisma/client`.
-- **Database Connection:** Defined in the `.env` file.
+- **Migrations Location:** `migrations/`
+- **Models Location:** `models/`
+- **Database Connection:** Defined in the `.env` file and configured in `knexfile.js`.
 
 **Common Commands:**
 ```bash
-# Generate Prisma client
-npx prisma generate
+# Apply pending migrations
+pnpm migrate:latest
 
-# Apply database migrations
-npx prisma migrate dev
-``` -->
+# Rollback the last batch of migrations
+pnpm migrate:rollback
+
+# Create a new migration file
+pnpm migrate:make <migration_name>
+```
 
 ## Middleware
 
 Custom middleware functions are implemented in the `middleware/` directory.
-
-<!-- - **Authentication Middleware:** Configured in `middleware/authMiddleware.js`.
-  - Ensures requests are authorized where required. -->
 
 ## **Adding new Language Support**
 

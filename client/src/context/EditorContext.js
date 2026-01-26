@@ -1,6 +1,7 @@
 'use client';
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { generateSlug } from 'random-word-slugs';
+import API_BASE_URL from '@/utils/config';
 
 const EditorContext = createContext();
 
@@ -27,11 +28,6 @@ export function EditorProvider({ children }) {
     },
   };
 
-  const apiBaseUrl =
-    process.env.NODE_ENV === 'production'
-      ? process.env.NEXT_PUBLIC_API_URL
-      : 'http://localhost:3001/api';
-
   // Fetch language config and update code
   const fetchLanguageConfig = useCallback(
     async lang => {
@@ -43,7 +39,7 @@ export function EditorProvider({ children }) {
 
       setIsLoadingConfig(true);
       try {
-        const response = await fetch(`${apiBaseUrl}/languages/${lang}`);
+        const response = await fetch(`${API_BASE_URL}/languages/${lang}`);
         if (!response.ok) throw new Error(`Failed to fetch ${lang} configuration`);
 
         const config = await response.json();
@@ -84,7 +80,7 @@ export function EditorProvider({ children }) {
 
           while (attempts < maxAttempts) {
             temp = generateSlug(2, slugFormat);
-            const checkResponse = await fetch(`${apiBaseUrl}/check/${temp}`);
+            const checkResponse = await fetch(`${API_BASE_URL}/check/${temp}`);
             if (checkResponse.ok) {
               setSlug(temp);
               break;
@@ -106,7 +102,7 @@ export function EditorProvider({ children }) {
   const handleRun = useCallback(async () => {
     setIsRunning(true);
     try {
-      const response = await fetch(`${apiBaseUrl}/execute`, {
+      const response = await fetch(`${API_BASE_URL}/execute`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -138,7 +134,7 @@ export function EditorProvider({ children }) {
 
   const fetchSnippet = useCallback(async slugParam => {
     try {
-      const response = await fetch(`${apiBaseUrl}/${slugParam}`);
+      const response = await fetch(`${API_BASE_URL}/${slugParam}`);
       if (!response.ok) {
         throw new Error('Failed to fetch snippet');
       }

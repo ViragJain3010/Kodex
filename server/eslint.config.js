@@ -11,6 +11,6 @@ export default defineConfig([
     extends: ['js/recommended'],
   },
   {
-    ignores: ['**/node_modules/**', '**/standalone/**', '**/prisma/generated/**'],
+    ignores: ['**/node_modules/**', '**/standalone/**'],
   },
 ]);

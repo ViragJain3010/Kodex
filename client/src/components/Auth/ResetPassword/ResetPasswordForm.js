@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import API_BASE_URL from '@/utils/config';
 
 export default function ResetPasswordForm({ token }) {
   const [newPassword, setNewPassword] = useState('');
@@ -22,7 +23,7 @@ export default function ResetPasswordForm({ token }) {
     }
 
     try {
-      const res = await fetch('/api/reset-password', {
+      const res = await fetch(`${API_BASE_URL}/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 // server/controllers/Auth.controller.js
-import prisma from '../config/prisma.js';
+import User from '../models/User.model.js';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import {
@@ -9,15 +9,13 @@ import {
 } from '../config/jwt.config.js';
 import { sendPasswordResetEmail } from '../services/Email.Service.js';
 
-// const prisma = new PrismaClient();
-
 export const authController = {
   async signup(req, res) {
     try {
       const { username, email, password } = req.body;
 
       // Check if user already exists
-      const existingUser = await prisma.user.findFirst({
+      const existingUser = await User.findFirst({
         where: {
           OR: [{ username }, { email }],
         },
@@ -33,7 +31,7 @@ export const authController = {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       // Create user
-      const user = await prisma.user.create({
+      const user = await User.create({
         data: {
           username,
           email,
@@ -67,7 +65,7 @@ export const authController = {
       const { identifier, password } = req.body; // identifier (email or username)
 
       // Find user by email or username
-      const user = await prisma.user.findFirst({
+      const user = await User.findFirst({
         where: {
           OR: [{ email: identifier }, { username: identifier }],
         },
@@ -132,7 +130,7 @@ export const authController = {
       const { email } = req.body;
 
       // Find user
-      const user = await prisma.user.findUnique({
+      const user = await User.findUnique({
         where: { email },
       });
 
@@ -145,7 +143,7 @@ export const authController = {
       const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hour from now
 
       // Save reset token to user
-      await prisma.user.update({
+      await User.update({
         where: { id: user.id },
         data: {
           resetToken,
@@ -178,7 +176,7 @@ export const authController = {
       const { token, newPassword } = req.body;
 
       // Find user with valid reset token
-      const user = await prisma.user.findFirst({
+      const user = await User.findFirst({
         where: {
           resetToken: token,
           resetTokenExpiry: { gt: new Date() },
@@ -193,7 +191,7 @@ export const authController = {
       const hashedPassword = await bcrypt.hash(newPassword, 10);
 
       // Update user password and clear reset token
-      await prisma.user.update({
+      await User.update({
         where: { id: user.id },
         data: {
           password: hashedPassword,

@@ -4,4 +4,3 @@ node_modules/
 .next/
 dist/
 build/ 
-prisma/generated/

@@ -5,6 +5,7 @@ import * as Select from '@radix-ui/react-select';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { useState, useEffect } from 'react';
 import { useEditor } from '@/context/EditorContext';
+import API_BASE_URL from '@/utils/config';
 
 export default function DropdownPane() {
   const {
@@ -21,15 +22,10 @@ export default function DropdownPane() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const apiBaseUrl =
-    process.env.NODE_ENV === 'production'
-      ? process.env.NEXT_PUBLIC_API_URL // Your production API URL
-      : 'http://localhost:3001/api'; // Local API URL during development
-
   useEffect(() => {
     const fetchLanguages = async () => {
       try {
-        const response = await fetch(`${apiBaseUrl}/languages`);
+        const response = await fetch(`${API_BASE_URL}/languages`);
         if (!response.ok) throw new Error('Failed to fetch languages');
         const data = await response.json();
         if (!data.success) throw new Error('API returned unsuccessful response');

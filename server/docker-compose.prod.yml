@@ -1,0 +1,61 @@
+services:
+  server:
+    image: ${DOCKER_USERNAME}/kodex-server:latest
+    container_name: kodex-server
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - DATABASE_URI=${DATABASE_URI}
+      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - FRONTEND_URL=${FRONTEND_URL}
+      # Critical for Docker-outside-of-Docker
+      - HOST_WORK_DIR=${HOST_WORK_DIR:-$PWD}
+      # Image Names are constructed automatically using DOCKER_USERNAME if set
+      - DOCKER_USERNAME=${DOCKER_USERNAME}
+      # The network name used by the backend to create runner containers
+      - DOCKER_NETWORK=code-network
+    volumes:
+      # Allow server to talk to Host Docker Daemon
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Shared temp directory (Host Path : Container Path)
+      - ./temp:/app/temp
+    depends_on:
+      - javascript-runner
+      - python-runner
+      - cpp-runner
+    networks:
+      - code-network
+
+  # Runner images - defining them here with 'pull_policy: always' ensures they are pulled
+  javascript-runner:
+    image: ${DOCKER_USERNAME}/code-executor-javascript:latest
+    pull_policy: always
+    command: ["/bin/true"] 
+    networks:
+      - code-network
+
+  python-runner:
+    image: ${DOCKER_USERNAME}/code-executor-python:latest
+    pull_policy: always
+    command: ["/bin/true"]
+    networks:
+      - code-network
+
+  cpp-runner:
+    image: ${DOCKER_USERNAME}/code-executor-cpp:latest
+    pull_policy: always
+    command: ["/bin/true"]
+    networks:
+      - code-network
+
+networks:
+  code-network:
+    name: code-network
+    driver: bridge

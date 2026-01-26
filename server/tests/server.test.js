@@ -1,24 +1,14 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import fs from 'fs';
-import prisma from '../config/prisma.js';
+import fs from 'node:fs';
+import db from '../config/db.js';
 import app from '@/api/index.js';
 
 // Mock dependencies
-vi.mock('../config/prisma.js', () => {
+vi.mock('../config/db.js', () => {
   return {
     default: {
-      $connect: vi.fn().mockResolvedValue(),
-      $disconnect: vi.fn().mockResolvedValue(),
-      snippet: {
-        findUnique: vi.fn(),
-        upsert: vi.fn(),
-      },
-      user: {
-        findFirst: vi.fn(),
-        create: vi.fn(),
-        findUnique: vi.fn(),
-        update: vi.fn(),
-      },
+      raw: vi.fn().mockResolvedValue(),
+      destroy: vi.fn().mockResolvedValue(),
     },
   };
 });
@@ -73,8 +63,8 @@ describe('Server', () => {
     fs.existsSync.mockReset();
     fs.mkdirSync.mockReset();
     fs.rmSync.mockReset();
-    prisma.$connect.mockReset();
-    prisma.$disconnect.mockReset();
+    db.raw.mockReset();
+    db.destroy.mockReset();
 
     // Mock console methods
     vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -93,7 +83,7 @@ describe('Server', () => {
     fs.existsSync.mockReturnValueOnce(false);
 
     // Import server to trigger init code
-    await import('./server.js');
+    await import('../server.js');
 
     expect(fs.existsSync).toHaveBeenCalled();
     expect(fs.mkdirSync).toHaveBeenCalled();
@@ -102,7 +92,7 @@ describe('Server', () => {
   it('does not create temp directory if it already exists', async () => {
     fs.existsSync.mockReturnValueOnce(true);
 
-    await import('./server.js');
+    await import('../server.js');
 
     expect(fs.existsSync).toHaveBeenCalled();
     expect(fs.mkdirSync).not.toHaveBeenCalled();
@@ -111,9 +101,9 @@ describe('Server', () => {
   it('connects to database and starts the server', async () => {
     fs.existsSync.mockReturnValueOnce(true);
 
-    await import('./server.js');
+    await import('../server.js');
 
-    expect(prisma.$connect).toHaveBeenCalled();
+    expect(db.raw).toHaveBeenCalled();
     expect(app.listen).toHaveBeenCalled();
     expect(console.log).toHaveBeenCalledWith('Connected to the database successfully!');
     expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Server running on port'));
@@ -121,11 +111,11 @@ describe('Server', () => {
 
   it('exits process if database connection fails', async () => {
     const error = new Error('Connection failed');
-    prisma.$connect.mockRejectedValueOnce(error);
+    db.raw.mockRejectedValueOnce(error);
 
     fs.existsSync.mockReturnValueOnce(true);
 
-    await import('./server.js');
+    await import('../server.js');
 
     expect(console.error).toHaveBeenCalledWith('Database connection failed:', error);
     expect(process.exit).toHaveBeenCalledWith(1);
@@ -134,7 +124,7 @@ describe('Server', () => {
   it('registers signal handlers for graceful shutdown', async () => {
     fs.existsSync.mockReturnValueOnce(true);
 
-    await import('./server.js');
+    await import('../server.js');
 
     expect(process.on).toHaveBeenCalledWith('SIGTERM', expect.any(Function));
     expect(process.on).toHaveBeenCalledWith('SIGINT', expect.any(Function));
@@ -143,35 +133,35 @@ describe('Server', () => {
   it('performs cleanup on SIGTERM', async () => {
     fs.existsSync.mockReturnValueOnce(true).mockReturnValueOnce(true);
 
-    await import('./server.js');
+    await import('../server.js');
 
     // Trigger SIGTERM handler
     await processEvents.SIGTERM();
 
     expect(fs.existsSync).toHaveBeenCalledTimes(2);
     expect(fs.rmSync).toHaveBeenCalled();
-    expect(prisma.$disconnect).toHaveBeenCalled();
+    expect(db.destroy).toHaveBeenCalled();
     expect(process.exit).toHaveBeenCalledWith(0);
   });
 
   it('performs cleanup on SIGINT', async () => {
     fs.existsSync.mockReturnValueOnce(true).mockReturnValueOnce(true);
 
-    await import('./server.js');
+    await import('../server.js');
 
     // Trigger SIGINT handler
     await processEvents.SIGINT();
 
     expect(fs.existsSync).toHaveBeenCalledTimes(2);
     expect(fs.rmSync).toHaveBeenCalled();
-    expect(prisma.$disconnect).toHaveBeenCalled();
+    expect(db.destroy).toHaveBeenCalled();
     expect(process.exit).toHaveBeenCalledWith(0);
   });
 
   it('does not attempt to remove temp directory if it does not exist during cleanup', async () => {
     fs.existsSync.mockReturnValueOnce(true).mockReturnValueOnce(false);
 
-    await import('./server.js');
+    await import('../server.js');
 
     // Trigger SIGTERM handler
     await processEvents.SIGTERM();

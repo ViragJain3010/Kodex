@@ -1,6 +1,7 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import API_BASE_URL from '@/utils/config';
 
 const AuthContext = createContext(undefined);
 
@@ -16,7 +17,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const response = await fetch('/api/login', {
+    const response = await fetch(`${API_BASE_URL}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
@@ -31,7 +32,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signup = async (email, password) => {
-    const response = await fetch('/api/signup', {
+    const response = await fetch(`${API_BASE_URL}/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
@@ -51,7 +52,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const forgotPassword = async email => {
-    const response = await fetch('/api/forgot-password', {
+    const response = await fetch(`${API_BASE_URL}/forgot-password`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
