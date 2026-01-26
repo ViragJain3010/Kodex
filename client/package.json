@@ -34,7 +34,7 @@
     "framer-motion": "^11.11.10",
     "lucide-react": "^0.454.0",
     "monaco-editor": "^0.52.2",
-    "next": "15.0.2",
+    "next": "15.0.7",
     "next-auth": "^4.24.10",
     "next-themes": "^0.3.0",
     "random-word-slugs": "^0.1.7",
