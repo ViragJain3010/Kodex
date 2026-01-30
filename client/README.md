@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kodex Client
 
-## Getting Started
+The **Client** is the frontend application for the Kodex platform, providing a seamless and interactive code editing and execution experience. Built with **Next.js**, **Monaco Editor**, and **XTerm.js**, it offers a terminal-like environment for developers to write, run, and debug code in real-time.
 
-First, run the development server:
+## Table of Contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [Requirements](#requirements)
+- [Setup](#setup)
+- [Directory Structure](#directory-structure)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Available Scripts](#available-scripts)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Requirements
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Node.js** (version 18 or higher)
+- **pnpm** (preferred package manager)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Setup
 
-## Learn More
+1. **Navigate to the Client Directory:**
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   cd client
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Install Dependencies:**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   pnpm install
+   ```
 
-## Deploy on Vercel
+3. **Configure the Environment:**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   - Create a `.env` file in the `client` directory based on the project requirements (e.g., API URLs if needed).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Run the Development Server:**
+
+   ```bash
+   pnpm dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Directory Structure
+
+- **`src/app/`**: Next.js App Router pages and layouts.
+- **`src/components/`**: Reusable UI components (Editor, Terminal, Navbar, etc.).
+- **`src/context/`**: React Context providers for global state management (e.g., Editor settings).
+- **`src/lib/`**: Library configurations and external integrations.
+- **`src/tests/`**: Test files for components and utilities.
+- **`src/utils/`**: Helper functions and utility classes.
+
+## Features
+
+- **Monaco Editor Integration**: Fully-featured code editor with syntax highlighting and multi-language support.
+- **Integrated Terminal**: Real-time terminal output using XTerm.js, providing an authentic CLI experience.
+- **Responsive Design**: Clean and modern UI built with TailwindCSS, optimized for different screen sizes.
+- **Dynamic Theme Switching**: Support for dark and light modes.
+- **Real-time Execution**: Instant feedback on code execution through integration with the Kodex Server.
+
+## Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org/)
+- **Styling**: [TailwindCSS](https://tailwindcss.com/)
+- **Code Editor**: [@monaco-editor/react](https://github.com/suren-atoyan/monaco-react)
+- **Terminal Emulator**: [XTerm.js](https://xtermjs.org/)
+- **Components**: [Radix UI](https://www.radix-ui.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Testing**: [Jest](https://jestjs.io/) + [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+
+## Available Scripts
+
+In the `client` directory, you can run:
+
+| Command | Description |
+| :--- | :--- |
+| `pnpm dev` | Starts the development server. |
+| `pnpm build` | Builds the application for production. |
+| `pnpm start` | Starts the production server. |
+| `pnpm lint` | Runs ESLint and Prettier to fix code style issues. |
+| `pnpm test` | Runs the test suite using Turbo and Jest. |
+| `pnpm test:coverage` | Runs tests and generates a coverage report. |

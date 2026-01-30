@@ -8,14 +8,14 @@ Kodex follows a monorepo architecture with PNPM workspaces, allowing independent
 
 ```
 Kodex/
-├── client/                                   # Frontend (Next.js)
-├── server/                                  # Backend (Express.js)
-├── pnpm-workspace.yaml        # workspace managment
+├── client/                                 # Frontend (Next.js)
+├── server/                                 # Backend (Express.js)
+├── pnpm-workspace.yaml                     # workspace managment
 ├── .husky/                                 # Git hooks managed by Husky
 ├── .github/                                # GitHub Actions CI workflows
-├── .lintstagedrc.json                 # Lint-Staged config file
-├── .turbo.json                           # Turbo config file
-└── commitlint.config.js            # commitlint config file
+├── .lintstagedrc.json                      # Lint-Staged config file
+├── .turbo.json                             # Turbo config file
+└── commitlint.config.js                    # commitlint config file
 ```
 
 > Even though PNPM workspaces are configured, we intentionally manage `client/` and `server/` dependencies separately due to independent deployment.
@@ -24,7 +24,7 @@ Kodex/
 
 ### ESLint
 
-- ESLint was configured individually inside both `client/` and `server/` directories.
+- ESLint is configured individually inside both `client/` and `server/` directories.
 - Base config extended from `next/core-web-vitals` for the frontend.
 - Custom rules were added based on code style and preferences.
 
@@ -72,7 +72,7 @@ export default [
 ### Husky Setup
 
 - [Husky](https://typicode.github.io/husky/) was used to bootstrap the hooks.
-- Hooks managed: `pre-commit`, `commit-msg`, `pre-push`
+- Hooks managed: `pre-commit`, `commit-msg`
 
 ### Pre-commit
 
@@ -89,12 +89,6 @@ export default [
 - Uses `@commitlint/cli` and `@commitlint/config-conventional`.
 - Validates message format like `type(scope): subject`.
 - Shows colorful terminal output and helpful tip if validation fails.
-
-### Pre-push
-
-- Runs unit tests for both client and server.
-- Colorful and cheeky output added.
-- Added randomized dev quotes for fun motivation.
 
 > Remember to run **`pnpm prepare`** everytime you add or remove a hook or else the symlink for husky and git wont be established for the new hook
 
@@ -191,15 +185,6 @@ packages:
 - Workflows are kept in `.github/workflows/`
 - Frontend and backend have independent jobs
 - Lint and test on pull requests
-- E2E tests on merge (TBD)
-
-## Next Steps
-
-- Add E2E tests with Playwright or Cypress
-- CI: Separate workflows for PR vs Merge
-- Auto-tag releases based on commits
-- Add commit message templates for contributors
-- Docs generation from codebase (via TypeDoc / JSDoc)
 
 ---
 

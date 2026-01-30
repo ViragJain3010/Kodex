@@ -1,4 +1,0 @@
-vitest-ui : npm i -D @vitest/ui
-vitest-coverage : npm i -D @vitest/coverage-v8
-
-add `test:ci` script to package.json (server)

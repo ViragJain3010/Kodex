@@ -1,5 +1,3 @@
-> ⚠️ Important: Due to limitations of AWS instance on the free tier, you will get an error while trying to execute the code on current deployment.
-
 # Kodex
 
 **Kodex** is a web-based code execution platform designed to provide real-time code editing, execution, and terminal-like interactivity across multiple programming languages. This monorepo hosts both the frontend (Next.js) and backend (Express.js + Docker) components.
@@ -41,7 +39,7 @@ Kodex/
 
 - Express.js
 - Docker
-- Prisma (ORM)
+- Knex + pg
 - Vitest + Supertest
 
 ## 🤖 Git Workflow
@@ -79,7 +77,7 @@ chore: update dependencies
 
 ## 🧑‍💻 Contributing
 
-Coming soon! For now, feel free to fork, clone, and explore.
+Please check the [CONTRIBUTING.md](CONTRIBUTING.md) file for more information.
 
 ## 📄 License
 
