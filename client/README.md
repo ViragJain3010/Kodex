@@ -31,7 +31,6 @@ The **Client** is the frontend application for the Kodex platform, providing a s
    ```
 
 3. **Configure the Environment:**
-
    - Create a `.env` file in the `client` directory based on the project requirements (e.g., API URLs if needed).
 
 4. **Run the Development Server:**
@@ -74,11 +73,11 @@ The **Client** is the frontend application for the Kodex platform, providing a s
 
 In the `client` directory, you can run:
 
-| Command | Description |
-| :--- | :--- |
-| `pnpm dev` | Starts the development server. |
-| `pnpm build` | Builds the application for production. |
-| `pnpm start` | Starts the production server. |
-| `pnpm lint` | Runs ESLint and Prettier to fix code style issues. |
-| `pnpm test` | Runs the test suite using Turbo and Jest. |
-| `pnpm test:coverage` | Runs tests and generates a coverage report. |
+| Command              | Description                                        |
+| :------------------- | :------------------------------------------------- |
+| `pnpm dev`           | Starts the development server.                     |
+| `pnpm build`         | Builds the application for production.             |
+| `pnpm start`         | Starts the production server.                      |
+| `pnpm lint`          | Runs ESLint and Prettier to fix code style issues. |
+| `pnpm test`          | Runs the test suite using Turbo and Jest.          |
+| `pnpm test:coverage` | Runs tests and generates a coverage report.        |
