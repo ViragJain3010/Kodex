@@ -7,6 +7,11 @@ import { useState, useEffect } from 'react';
 import { useEditor } from '@/context/EditorContext';
 import API_BASE_URL from '@/utils/config';
 
+interface Language {
+  value: string;
+  label: string;
+}
+
 export default function DropdownPane() {
   const {
     language,
@@ -18,9 +23,9 @@ export default function DropdownPane() {
     slug,
     setIsLanguageChangedByUser,
   } = useEditor();
-  const [languages, setLanguages] = useState([]);
+  const [languages, setLanguages] = useState<Language[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchLanguages = async () => {
@@ -30,7 +35,7 @@ export default function DropdownPane() {
         const data = await response.json();
         if (!data.success) throw new Error('API returned unsuccessful response');
         setLanguages(data.languages);
-      } catch (err) {
+      } catch (err: any) {
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -42,12 +47,11 @@ export default function DropdownPane() {
 
   useEffect(() => {
     if (slug) {
-      // Update the browser's URL to '/{slug}' without reloading the page
       window.history.pushState(null, '', `/${slug}`);
     }
   }, [slug]);
 
-  const handleLanguageChange = newLanguage => {
+  const handleLanguageChange = (newLanguage: string) => {
     setIsLanguageChangedByUser(true);
     setLanguage(newLanguage);
   };
@@ -88,17 +92,15 @@ export default function DropdownPane() {
         <Select.Portal>
           <Select.Content
             className="bg-white dark:bg-gray-800 rounded-md shadow-lg overflow-hidden"
-            position="popper" // Ensures the dropdown opens in a way that all items are visible
-            sideOffset={5} // Adds some spacing from the trigger
+            position="popper"
+            sideOffset={5}
           >
-            <Select.Viewport
-              className="p-2 max-h-56 overflow-y-auto" // Adds scrollable content with a max height of 56 (14rem)
-            >
+            <Select.Viewport className="p-2 max-h-56 overflow-y-auto">
               {languages.map(lang => (
                 <Select.Item
                   key={lang.value}
                   value={lang.value}
-                  className="text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md px-3 py-2  transition-colors"
+                  className="text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md px-3 py-2 transition-colors"
                 >
                   <Select.ItemText>{lang.label}</Select.ItemText>
                 </Select.Item>

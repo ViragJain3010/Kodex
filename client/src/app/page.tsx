@@ -1,4 +1,4 @@
-// src/app/page.js
+// src/app/page.tsx
 'use client';
 import Footer from '@/components/Footer/Footer';
 import ResizableLayout from '@/components/ResizableLayout/ResizableLayout';

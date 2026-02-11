@@ -1,6 +1,6 @@
 import { loader } from '@monaco-editor/react';
 
-const monacoThemes = {
+const monacoThemes: Record<string, string> = {
   active4d: 'Active4D',
   'all-hallows-eve': 'All Hallows Eve',
   amy: 'Amy',
@@ -51,7 +51,7 @@ const monacoThemes = {
   monoindustrial: 'monoindustrial',
 };
 
-const defineTheme = theme => {
+const defineTheme = (theme: string): Promise<void> => {
   return new Promise(res => {
     Promise.all([loader.init(), import(`monaco-themes/themes/${monacoThemes[theme]}.json`)]).then(
       ([monaco, themeData]) => {

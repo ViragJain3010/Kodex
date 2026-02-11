@@ -7,14 +7,20 @@ const MonacoEditor = dynamic(() => import('@monaco-editor/react'), {
   ssr: false,
 });
 
-export default function Editor({ onLoad }) {
+interface EditorProps {
+  onLoad: () => void;
+}
+
+export default function Editor({ onLoad }: EditorProps) {
   const { language, code, setCode, isLoadingConfig, createSlug, slug } = useEditor();
 
   const handleChange = useCallback(
-    newValue => {
-      setCode(newValue);
-      if (!slug) {
-        createSlug();
+    (newValue: string | undefined) => {
+      if (newValue !== undefined) {
+        setCode(newValue);
+        if (!slug) {
+          createSlug();
+        }
       }
     },
     [setCode, createSlug, slug]

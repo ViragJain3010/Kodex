@@ -13,15 +13,15 @@ const Editor = dynamic(() => import('@/components/Editor/Editor'), {
 });
 
 export default function ResizableLayout() {
-  const [leftWidth, setLeftWidth] = useState(50);
-  const [upperRightHeight, setUpperRightHeight] = useState(50);
+  const [leftWidth, setLeftWidth] = useState<number>(50);
+  const [upperRightHeight, setUpperRightHeight] = useState<number>(50);
   const [isEditorLoading, setIsEditorLoading] = useState(true);
 
-  const handleLeftResize = useCallback(sizes => {
+  const handleLeftResize = useCallback((sizes: number[]) => {
     setLeftWidth(sizes[0]);
   }, []);
 
-  const handleUpperRightResize = useCallback(sizes => {
+  const handleUpperRightResize = useCallback((sizes: number[]) => {
     setUpperRightHeight(sizes[0]);
   }, []);
 

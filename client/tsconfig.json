@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
@@ -22,21 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "src/components/Header.js",
-    "src/components/Footer/Footer.js",
-    "src/components/Editor.js",
-    "src/app/layout.js",
-    "src/app/page.js",
-    "src/components/ui/sheet.js",
-    "tailwind.config.ts",
-    "src/components/Header/KodexLogo.js",
-    "src/components/Loader/LoadingSpinner.js",
-    "next.config.ts"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/**/*"],
   "exclude": ["node_modules"]
 }

@@ -1,12 +1,26 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import API_BASE_URL from '@/utils/config';
 
-const AuthContext = createContext(undefined);
+interface User {
+  id: string;
+  email: string;
+  // add other user fields if necessary
+}
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+interface AuthContextType {
+  user: User | null;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+  forgotPassword: (email: string) => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     // Check if user is logged in on initial load
@@ -16,7 +30,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (email: string, password: string) => {
     const response = await fetch(`${API_BASE_URL}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -31,7 +45,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const signup = async (email, password) => {
+  const signup = async (email: string, password: string) => {
     const response = await fetch(`${API_BASE_URL}/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -51,7 +65,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
   };
 
-  const forgotPassword = async email => {
+  const forgotPassword = async (email: string) => {
     const response = await fetch(`${API_BASE_URL}/forgot-password`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -63,7 +77,15 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, forgotPassword }}>
+    <AuthContext.Provider
+      value={{
+        user, // current logged in user
+        login, // function to log in
+        signup, // function to sign up
+        logout, // function to log out
+        forgotPassword, // function to send reset password email
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

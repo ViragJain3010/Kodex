@@ -4,8 +4,12 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function DevNotesModal({ isPageLoaded }) {
-  const [currentModal, setCurrentModal] = useState(null);
+interface DevNotesModalProps {
+  isPageLoaded: boolean;
+}
+
+export default function DevNotesModal({ isPageLoaded }: DevNotesModalProps) {
+  const [currentModal, setCurrentModal] = useState<'welcome' | null>(null);
 
   useEffect(() => {
     if (isPageLoaded) {
