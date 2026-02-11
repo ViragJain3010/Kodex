@@ -3,6 +3,12 @@
 import ExecutorFactory from '../executors/index.js';
 import { snippetController } from './Snippet.controller.js';
 
+/**
+ * Controller to handle code execution requests.
+ *
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ */
 export const executeController = async (req, res) => {
   console.log('Inside executeController');
   try {
@@ -14,25 +20,6 @@ export const executeController = async (req, res) => {
     // Execute code
     const result = await executor.execute(code, input);
 
-    // <------------- Optimised approach but not needed as of current scenerio ---------------->
-    // Send response in chunks-----------------------------------
-    // const OptimisticResponse = {
-    //     success: result.success,
-    //     path: "at server/api/routes/execute.js/try()",
-    //     output: result.output,
-    //     error: result.error,
-    //     executionTime: result.executionTime,
-    //   }
-
-    // res.write(JSON.stringify(OptimisticResponse)+"\n");
-
-    // req.body.output = result.output;
-    // save the output to the database
-    // await snippetController.createSnippet(req, res);
-    // res.end()
-    // chunks end here--------------------------------------------
-
-    // original method to send the response in one go
     if (slug) {
       const response = await snippetController.createSnippet(
         slug,

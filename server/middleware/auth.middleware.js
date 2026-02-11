@@ -1,6 +1,13 @@
 // server/middleware/authMiddleware.js
 import passport from '../config/passport.config.js';
 
+/**
+ * Middleware to require JWT authentication.
+ *
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @param {import('express').NextFunction} next - Express next function.
+ */
 export const requireAuth = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user, info) => {
     if (err) {
@@ -21,7 +28,13 @@ export const requireAuth = (req, res, next) => {
   })(req, res, next);
 };
 
-// Optional middleware to allow authenticated routes with optional auth
+/**
+ * Middleware for optional JWT authentication.
+ *
+ * @param {import('express').Request} req - Express request object.
+ * @param {import('express').Response} res - Express response object.
+ * @param {import('express').NextFunction} next - Express next function.
+ */
 export const optionalAuth = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user) => {
     if (err) {

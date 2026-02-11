@@ -20,6 +20,7 @@ vi.mock('fs', async () => {
     existsSync: vi.fn(),
     mkdirSync: vi.fn(),
     rmSync: vi.fn(),
+    chmodSync: vi.fn(),
   };
   return {
     ...mockedFs,
