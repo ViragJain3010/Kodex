@@ -1,7 +1,10 @@
 'use client';
 import dynamic from 'next/dynamic';
-import { useEditor } from '@/context/EditorContext';
-import { useEffect, useCallback } from 'react';
+import { useCode, useCodeActions } from '@/context/editor/EditorContentContext';
+import { useEditorSettings } from '@/context/editor/EditorSettingsContext';
+import { useSnippet } from '@/context/editor/SnippetContext';
+import { useSnippetActions } from '@/context/editor/SnippetContext';
+import { useEffect, useCallback, memo } from 'react';
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), {
   ssr: false,
@@ -11,8 +14,14 @@ interface EditorProps {
   onLoad: () => void;
 }
 
-export default function Editor({ onLoad }: EditorProps) {
-  const { language, code, setCode, isLoadingConfig, createSlug, slug } = useEditor();
+const Editor = memo(({ onLoad }: EditorProps) => {
+  // Subscribe ONLY to code value
+  const { code } = useCode();
+  const { setCode } = useCodeActions();
+
+  const { language, isLoadingConfig } = useEditorSettings();
+  const { slug } = useSnippet();
+  const { createSlug } = useSnippetActions();
 
   const handleChange = useCallback(
     (newValue: string | undefined) => {
@@ -65,4 +74,8 @@ export default function Editor({ onLoad }: EditorProps) {
       </div>
     </div>
   );
-}
+});
+
+Editor.displayName = 'Editor';
+
+export default Editor;

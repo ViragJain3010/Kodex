@@ -1,12 +1,13 @@
 'use client';
 
+import { memo } from 'react';
 import { useTheme } from 'next-themes';
 import { Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import KodexLogo from './KodexLogo';
 import Link from 'next/link';
 
-export default function Header() {
+const Header = memo(() => {
   const { theme, setTheme } = useTheme();
 
   return (
@@ -31,4 +32,8 @@ export default function Header() {
       </div>
     </header>
   );
-}
+});
+
+Header.displayName = 'Header';
+
+export default Header;

@@ -1,12 +1,12 @@
 'use client';
-import { useEditor } from '@/context/EditorContext';
-import { useState } from 'react';
+import { useExecution } from '@/context/editor/ExecutionContext';
+import { useState, memo } from 'react';
 import { Button } from '@/components/ui/button';
 import { ClipboardCopy, Check } from 'lucide-react';
 import { formatExecutionTime } from '@/utils/timeUtils';
 
-export default function OutputArea() {
-  const { output, isOutputSuccess, executionTime } = useEditor();
+const OutputArea = memo(() => {
+  const { output, isOutputSuccess, executionTime } = useExecution();
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = async () => {
@@ -70,4 +70,8 @@ export default function OutputArea() {
       </div>
     </div>
   );
-}
+});
+
+OutputArea.displayName = 'OutputArea';
+
+export default OutputArea;
