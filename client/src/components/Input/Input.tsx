@@ -1,10 +1,12 @@
 'use client';
 import { Textarea } from '@/components/ui/textarea';
-import { useEditor } from '@/context/EditorContext';
-import { ChangeEvent } from 'react';
+import { useInput, useInputActions } from '@/context/editor/EditorContentContext';
+import { ChangeEvent, memo } from 'react';
 
-export default function InputArea() {
-  const { input, setInput } = useEditor();
+const InputArea = memo(() => {
+  // Subscribe ONLY to input value, NOT code value.
+  const { input } = useInput();
+  const { setInput } = useInputActions();
 
   return (
     <div className="flex flex-col h-full">
@@ -17,4 +19,8 @@ export default function InputArea() {
       />
     </div>
   );
-}
+});
+
+InputArea.displayName = 'InputArea';
+
+export default InputArea;

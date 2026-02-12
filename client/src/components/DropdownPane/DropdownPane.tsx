@@ -1,10 +1,17 @@
 'use client';
+
 import { PlayIcon } from 'lucide-react';
 import { ResetDialog } from './ResetDialog';
 import * as Select from '@radix-ui/react-select';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
-import { useState, useEffect } from 'react';
-import { useEditor } from '@/context/EditorContext';
+import { useState, useEffect, useCallback, memo } from 'react';
+import { useCodeActions, useInputActions } from '@/context/editor/EditorContentContext';
+import { useExecution, useExecutionActions } from '@/context/editor/ExecutionContext';
+import {
+  useEditorSettings,
+  useEditorSettingsActions,
+} from '@/context/editor/EditorSettingsContext';
+import { useSnippet } from '@/context/editor/SnippetContext';
 import API_BASE_URL from '@/utils/config';
 
 interface Language {
@@ -12,17 +19,18 @@ interface Language {
   label: string;
 }
 
-export default function DropdownPane() {
-  const {
-    language,
-    setLanguage,
-    handleRun,
-    handleReset,
-    isRunning,
-    isLoadingConfig,
-    slug,
-    setIsLanguageChangedByUser,
-  } = useEditor();
+const DropdownPane = memo(() => {
+  // Subscribe only to stable or rarely changing settings
+  const { language, isLoadingConfig, languageConfigs } = useEditorSettings();
+  const { isRunning } = useExecution();
+  const { slug } = useSnippet();
+
+  // Stable Actions
+  const { setCode, codeRef } = useCodeActions();
+  const { setInput, inputRef } = useInputActions();
+  const { setOutput, handleRun, setExecutionTime } = useExecutionActions();
+  const { setLanguage, setIsLanguageChangedByUser } = useEditorSettingsActions();
+
   const [languages, setLanguages] = useState<Language[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -51,10 +59,29 @@ export default function DropdownPane() {
     }
   }, [slug]);
 
-  const handleLanguageChange = (newLanguage: string) => {
-    setIsLanguageChangedByUser(true);
-    setLanguage(newLanguage);
-  };
+  const handleLanguageChange = useCallback(
+    (newLanguage: string) => {
+      setIsLanguageChangedByUser(true);
+      setLanguage(newLanguage);
+    },
+    [setIsLanguageChangedByUser, setLanguage]
+  );
+
+  const onRunClick = useCallback(() => {
+    // CRITICAL: We use Refs here to get the LATEST code/input
+    // WITHOUT subscribing to their re-renders.
+    // DropdownPane will now remain completely still while typing.
+    handleRun(language, codeRef.current, inputRef.current, slug);
+  }, [handleRun, language, slug, codeRef, inputRef]);
+
+  const onReset = useCallback(() => {
+    if (languageConfigs[language]) {
+      setCode(languageConfigs[language].safeConfig.defaultBoilerplate);
+    }
+    setInput('');
+    setOutput('');
+    setExecutionTime(0);
+  }, [language, languageConfigs, setCode, setInput, setOutput, setExecutionTime]);
 
   if (isLoading || error) {
     return (
@@ -71,7 +98,7 @@ export default function DropdownPane() {
           >
             <PlayIcon className="inline-block mr-2 h-4 w-4" /> Run
           </button>
-          <ResetDialog onReset={handleReset} />
+          <ResetDialog onReset={onReset} />
         </div>
       </div>
     );
@@ -111,7 +138,7 @@ export default function DropdownPane() {
       </Select.Root>
       <div className="space-x-2">
         <button
-          onClick={handleRun}
+          onClick={onRunClick}
           disabled={isRunning || isLoadingConfig}
           className={`px-4 py-2 text-sm font-medium text-white ${
             isRunning || isLoadingConfig
@@ -122,8 +149,12 @@ export default function DropdownPane() {
           <PlayIcon className="inline-block mr-2 h-4 w-4" />
           {isRunning ? 'Running...' : 'Run'}
         </button>
-        <ResetDialog onReset={handleReset} />
+        <ResetDialog onReset={onReset} />
       </div>
     </div>
   );
-}
+});
+
+DropdownPane.displayName = 'DropdownPane';
+
+export default DropdownPane;
