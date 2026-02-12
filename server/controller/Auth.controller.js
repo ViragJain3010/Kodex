@@ -10,6 +10,12 @@ import {
 import { sendPasswordResetEmail } from '../services/Email.Service.js';
 
 export const authController = {
+  /**
+   * Register a new user with username, email, and password.
+   *
+   * @param {import('express').Request} req - Express request object.
+   * @param {import('express').Response} res - Express response object.
+   */
   async signup(req, res) {
     try {
       const { username, email, password } = req.body;
@@ -59,7 +65,12 @@ export const authController = {
     }
   },
 
-  // Local Login
+  /**
+   * Log in an existing user using username/email and password.
+   *
+   * @param {import('express').Request} req - Express request object.
+   * @param {import('express').Response} res - Express response object.
+   */
   async login(req, res) {
     try {
       const { identifier, password } = req.body; // identifier (email or username)
@@ -102,7 +113,12 @@ export const authController = {
     }
   },
 
-  // Refresh Token
+  /**
+   * Refresh the access token using a valid refresh token.
+   *
+   * @param {import('express').Request} req - Express request object.
+   * @param {import('express').Response} res - Express response object.
+   */
   async refreshToken(req, res) {
     try {
       const { refreshToken } = req.body;
@@ -124,7 +140,12 @@ export const authController = {
     }
   },
 
-  // Forgot Password
+  /**
+   * Initiate the forgot password process by sending a reset link via email.
+   *
+   * @param {import('express').Request} req - Express request object.
+   * @param {import('express').Response} res - Express response object.
+   */
   async forgotPassword(req, res) {
     try {
       const { email } = req.body;
@@ -152,7 +173,6 @@ export const authController = {
       });
 
       // Create reset link
-      // Note: Replace with your actual frontend reset password URL
       const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
       console.log('Reset Link:', resetLink);
 
@@ -170,7 +190,12 @@ export const authController = {
     }
   },
 
-  // Reset Password
+  /**
+   * Reset the user's password using a valid reset token.
+   *
+   * @param {import('express').Request} req - Express request object.
+   * @param {import('express').Response} res - Express response object.
+   */
   async resetPassword(req, res) {
     try {
       const { token, newPassword } = req.body;
