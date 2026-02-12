@@ -1,4 +1,4 @@
-// src/app/[slug]/page.js
+// src/app/[slug]/page.tsx
 'use client';
 import Footer from '@/components/Footer/Footer';
 import ResizableLayout from '@/components/ResizableLayout/ResizableLayout';
@@ -9,7 +9,8 @@ import { useEditor } from '@/context/EditorContext';
 import { useParams } from 'next/navigation';
 
 export default function Home() {
-  const { slug } = useParams();
+  const params = useParams();
+  const slug = params?.slug as string;
   const { fetchSnippet, setIsLanguageChangedByUser } = useEditor();
   const [isPageLoaded, setIsPageLoaded] = useState(false);
 
@@ -19,7 +20,7 @@ export default function Home() {
       fetchSnippet(slug);
     }
     setIsPageLoaded(true);
-  }, [slug]);
+  }, [slug, fetchSnippet, setIsLanguageChangedByUser]);
 
   return (
     <>

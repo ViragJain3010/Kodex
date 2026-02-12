@@ -24,7 +24,7 @@ export default function OutputArea() {
   return (
     <div className="flex flex-col h-full">
       <div className="flex justify-between items-center mb-4">
-        <main>
+        <div>
           <h2 className="text-lg font-semibold">Output</h2>
           {executionTime !== 0 && (
             <div className="mt-2 flex items-center space-x-2">
@@ -36,7 +36,7 @@ export default function OutputArea() {
               </span>
             </div>
           )}
-        </main>
+        </div>
         <Button
           variant="outline"
           size="sm"

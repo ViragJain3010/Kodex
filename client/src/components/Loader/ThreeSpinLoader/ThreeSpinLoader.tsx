@@ -1,6 +1,7 @@
+import React from 'react';
 import './ThreeSpinLoader.css';
 
-const ThreeSpinLoader = () => {
+const ThreeSpinLoader: React.FC = () => {
   return (
     <div className="loader">
       <div className="inner one"></div>

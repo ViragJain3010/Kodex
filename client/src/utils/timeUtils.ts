@@ -1,4 +1,4 @@
-export function formatExecutionTime(ms) {
+export function formatExecutionTime(ms: number): string {
   if (ms < 1) {
     return '< 1 ms';
   } else if (ms < 1000) {

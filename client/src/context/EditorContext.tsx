@@ -1,11 +1,56 @@
 'use client';
-import { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  ReactNode,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 import { generateSlug } from 'random-word-slugs';
 import API_BASE_URL from '@/utils/config';
 
-const EditorContext = createContext();
+interface LanguageConfig {
+  success: boolean;
+  safeConfig: {
+    defaultBoilerplate: string;
+  };
+}
 
-export function EditorProvider({ children }) {
+interface LanguageConfigs {
+  [key: string]: LanguageConfig;
+}
+
+interface EditorContextType {
+  code: string;
+  setCode: Dispatch<SetStateAction<string>>;
+  input: string;
+  setInput: Dispatch<SetStateAction<string>>;
+  output: string;
+  setOutput: Dispatch<SetStateAction<string>>;
+  language: string;
+  setLanguage: Dispatch<SetStateAction<string>>;
+  isRunning: boolean;
+  isLoadingConfig: boolean;
+  handleRun: () => Promise<void>;
+  handleReset: () => void;
+  slug: string;
+  fetchSnippet: (slugParam: string) => Promise<void>;
+  setIsLanguageChangedByUser: Dispatch<SetStateAction<boolean>>;
+  createSlug: () => Promise<void>;
+  isOutputSuccess: boolean;
+  executionTime: number;
+}
+
+const EditorContext = createContext<EditorContextType | undefined>(undefined);
+
+interface EditorProviderProps {
+  children: ReactNode;
+}
+
+export function EditorProvider({ children }: EditorProviderProps) {
   const [code, setCode] = useState('');
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
@@ -16,10 +61,10 @@ export function EditorProvider({ children }) {
   const [isLanguageChangedByUser, setIsLanguageChangedByUser] = useState(true);
   const [slug, setSlug] = useState('');
   // Cache for language configurations
-  const [languageConfigs, setLanguageConfigs] = useState({});
+  const [languageConfigs, setLanguageConfigs] = useState<LanguageConfigs>({});
   const [isLoadingConfig, setIsLoadingConfig] = useState(false);
 
-  const slugFormat = {
+  const slugFormat: any = {
     format: 'kebab',
     partsOfSpeech: ['adjective', 'noun'],
     categories: {
@@ -30,7 +75,7 @@ export function EditorProvider({ children }) {
 
   // Fetch language config and update code
   const fetchLanguageConfig = useCallback(
-    async lang => {
+    async (lang: string) => {
       // If we already have the config, use it
       if (languageConfigs[lang]) {
         setCode(languageConfigs[lang].safeConfig.defaultBoilerplate);
@@ -42,7 +87,7 @@ export function EditorProvider({ children }) {
         const response = await fetch(`${API_BASE_URL}/languages/${lang}`);
         if (!response.ok) throw new Error(`Failed to fetch ${lang} configuration`);
 
-        const config = await response.json();
+        const config: LanguageConfig = await response.json();
         if (!config.success) throw new Error(`API error for ${lang} configuration`);
 
         // Update cache with new config
@@ -53,14 +98,14 @@ export function EditorProvider({ children }) {
 
         // Set the boilerplate code
         setCode(config.safeConfig.defaultBoilerplate);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching language config:', error);
         setOutput(`Error loading ${lang} configuration: ${error.message}`);
       } finally {
         setIsLoadingConfig(false);
       }
     },
-    [language]
+    [languageConfigs]
   );
 
   // Effect to fetch config when language changes
@@ -68,35 +113,33 @@ export function EditorProvider({ children }) {
     if (isLanguageChangedByUser) {
       fetchLanguageConfig(language);
     }
-  }, [language, fetchLanguageConfig]);
+  }, [language, fetchLanguageConfig, isLanguageChangedByUser]);
 
   const createSlug = useCallback(async () => {
-    let temp;
+    let temp: string | undefined;
     try {
       if (!slug) {
-        {
-          let attempts = 0;
-          const maxAttempts = 10;
+        let attempts = 0;
+        const maxAttempts = 10;
 
-          while (attempts < maxAttempts) {
-            temp = generateSlug(2, slugFormat);
-            const checkResponse = await fetch(`${API_BASE_URL}/check/${temp}`);
-            if (checkResponse.ok) {
-              setSlug(temp);
-              break;
-            }
-            attempts++;
+        while (attempts < maxAttempts) {
+          temp = generateSlug(2, slugFormat);
+          const checkResponse = await fetch(`${API_BASE_URL}/check/${temp}`);
+          if (checkResponse.ok) {
+            setSlug(temp);
+            break;
           }
+          attempts++;
+        }
 
-          if (!temp) {
-            throw new Error('Failed to generate a valid slug after multiple attempts.');
-          }
+        if (!temp) {
+          throw new Error('Failed to generate a valid slug after multiple attempts.');
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       setOutput(`Error: ${error.message}`);
     }
-  });
+  }, [slug, slugFormat]);
 
   // Run code
   const handleRun = useCallback(async () => {
@@ -125,14 +168,14 @@ export function EditorProvider({ children }) {
         setOutput(data.output);
         setExecutionTime(data.executionTime);
       }
-    } catch (error) {
+    } catch (error: any) {
       setOutput(`Error: ${error.message}`);
     } finally {
       setIsRunning(false);
     }
-  }, [language, code, input, slugFormat]);
+  }, [language, code, input, slug]);
 
-  const fetchSnippet = useCallback(async slugParam => {
+  const fetchSnippet = useCallback(async (slugParam: string) => {
     try {
       const response = await fetch(`${API_BASE_URL}/${slugParam}`);
       if (!response.ok) {
@@ -141,17 +184,17 @@ export function EditorProvider({ children }) {
       const data = await response.json();
       if (!data) {
         window.history.pushState(null, '', `/`);
-        handleReset;
+        handleReset();
       } else {
         setCode(data.code);
         setInput(data.input);
         setOutput(data.output);
         setLanguage(data.language);
       }
-    } catch (error) {
+    } catch (error: any) {
       setOutput(`Error: ${error.message}`);
     }
-  });
+  }, []);
 
   const handleReset = useCallback(() => {
     // Use cached config to reset code
@@ -163,7 +206,7 @@ export function EditorProvider({ children }) {
     setExecutionTime(0);
   }, [language, languageConfigs]);
 
-  const value = {
+  const value: EditorContextType = {
     code, // user code
     setCode,
     input, // user input

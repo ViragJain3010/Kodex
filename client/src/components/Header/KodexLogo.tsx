@@ -3,18 +3,37 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
-const Particle = ({ x, y, radius, color }) => (
+interface ParticleProps {
+  x: number;
+  y: number;
+  radius: number;
+  color: string;
+}
+
+const Particle = ({ x, y, radius, color }: ParticleProps) => (
   <motion.circle cx={x} cy={y} r={radius} fill={color} />
 );
 
+interface ParticleState {
+  id: number;
+  x: number;
+  y: number;
+  radius: number;
+  color: string;
+  velocity: {
+    x: number;
+    y: number;
+  };
+}
+
 export default function KodexLogo() {
-  const [particles, setParticles] = useState([]);
+  const [particles, setParticles] = useState<ParticleState[]>([]);
   const [isHovered, setIsHovered] = useState(false);
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const createParticles = () => {
-      const newParticles = [];
+      const newParticles: ParticleState[] = [];
       for (let i = 0; i < 10 + Math.random() * 20; i++) {
         newParticles.push({
           id: i,
@@ -35,7 +54,7 @@ export default function KodexLogo() {
   }, []);
 
   useEffect(() => {
-    let animationFrameId;
+    let animationFrameId: number;
 
     const animateParticles = () => {
       setParticles(prevParticles =>
@@ -78,11 +97,13 @@ export default function KodexLogo() {
       </svg>
       <motion.div
         className="relative z-10 text-4xl font-bold"
-        style={{
-          background: 'linear-gradient(135deg, #00FFFF, #0080FF)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-        }}
+        style={
+          {
+            background: 'linear-gradient(135deg, #00FFFF, #0080FF)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          } as React.CSSProperties
+        }
       >
         KODEX
       </motion.div>

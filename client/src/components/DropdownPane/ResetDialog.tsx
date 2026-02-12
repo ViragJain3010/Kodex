@@ -1,11 +1,16 @@
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { ResetIcon } from '@radix-ui/react-icons';
+import React from 'react';
 
-export function ResetDialog({ onReset }) {
+interface ResetDialogProps {
+  onReset: () => void;
+}
+
+export function ResetDialog({ onReset }: ResetDialogProps) {
   return (
     <AlertDialog.Root>
       <AlertDialog.Trigger asChild>
-        <button className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-md hover:bg-gray-100  focus:z-10 focus:ring-2 focus:ring-blue-700  dark:bg-gray-600 dark:text-gray-100 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+        <button className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-md hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 dark:bg-gray-600 dark:text-gray-100 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
           <ResetIcon className="inline-block mr-2 h-4 w-4" />
           Reset
         </button>
