@@ -2,19 +2,13 @@
 
 import { useState, useCallback } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import dynamic from 'next/dynamic';
+import Editor from '@/components/Editor/Editor';
 import InputArea from '@/components/Input/Input';
 import OutputArea from '@/components/Output/Output';
-import LoadingSpinner from '../Loader/LoadingSpinner';
-
-const Editor = dynamic(() => import('@/components/Editor/Editor'), {
-  ssr: false,
-});
 
 export default function ResizableLayout() {
   const [leftWidth, setLeftWidth] = useState<number>(50);
   const [upperRightHeight, setUpperRightHeight] = useState<number>(50);
-  const [isEditorLoading, setIsEditorLoading] = useState(true);
 
   const handleLeftResize = useCallback((sizes: number[]) => {
     setLeftWidth(sizes[0]);
@@ -24,20 +18,13 @@ export default function ResizableLayout() {
     setUpperRightHeight(sizes[0]);
   }, []);
 
-  const handleEditorLoad = useCallback(() => {
-    setIsEditorLoading(false);
-  }, []);
-
   return (
     <>
       <div className="hidden md:block h-full rounded-2xl p-1">
         <PanelGroup direction="horizontal" onLayout={handleLeftResize}>
           <Panel defaultSize={leftWidth} minSize={20} className="rounded-2xl">
             <div className="h-full p-4 bg-background text-foreground overflow-auto">
-              {isEditorLoading && <LoadingSpinner />}
-              <div className={isEditorLoading ? 'hidden' : 'h-full'}>
-                <Editor onLoad={handleEditorLoad} />
-              </div>
+              <Editor />
             </div>
           </Panel>
           <PanelResizeHandle className="w-2 dark:bg-muted  bg-gray-200 flex items-center justify-center rounded-xl group">
@@ -67,10 +54,7 @@ export default function ResizableLayout() {
       <div className="md:hidden h-full">
         <div className="flex flex-col gap-4 p-1">
           <div className="h-[300px] bg-background text-foreground overflow-auto rounded-lg border p-2">
-            {isEditorLoading && <LoadingSpinner />}
-            <div className={isEditorLoading ? 'hidden' : 'h-full'}>
-              <Editor onLoad={handleEditorLoad} />
-            </div>
+            <Editor />
           </div>
           <div className="h-[200px] bg-background text-foreground overflow-auto rounded-lg border p-2">
             <InputArea />
