@@ -31,8 +31,9 @@ app.use('/api', testRoutes);
 app.use('/api', languagesRoutes);
 app.use('/api', snippetRoutes);
 
+/* eslint-disable no-unused-vars */
 // Error handling middleware
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   console.error('Error:', err);
   res.status(500).json({
     success: false,
