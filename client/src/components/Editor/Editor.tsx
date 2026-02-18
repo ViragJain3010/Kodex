@@ -6,15 +6,16 @@ import { useSnippet } from '@/context/editor/SnippetContext';
 import { useSnippetActions } from '@/context/editor/SnippetContext';
 import { useEffect, useCallback, memo } from 'react';
 
+import EditorSkeleton from '../Loader/EditorSkeleton';
+
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), {
   ssr: false,
+  loading: () => <EditorSkeleton />,
 });
 
-interface EditorProps {
-  onLoad: () => void;
-}
+interface EditorProps {}
 
-const Editor = memo(({ onLoad }: EditorProps) => {
+const Editor = memo(({}: EditorProps) => {
   // Subscribe ONLY to code value
   const { code } = useCode();
   const { setCode } = useCodeActions();
@@ -34,10 +35,6 @@ const Editor = memo(({ onLoad }: EditorProps) => {
     },
     [setCode, createSlug, slug]
   );
-
-  useEffect(() => {
-    onLoad();
-  }, [onLoad]);
 
   if (isLoadingConfig) {
     return (
@@ -60,7 +57,6 @@ const Editor = memo(({ onLoad }: EditorProps) => {
           value={code}
           theme="vs-dark"
           onChange={handleChange}
-          onMount={onLoad}
           options={{
             minimap: { enabled: false },
             fontSize: 14,
