@@ -4,6 +4,8 @@ import './globals.css';
 import Header from '@/components/Header/Header';
 import { EditorProvider } from '@/context/EditorContext';
 import { ThemeProvider } from '@/context/ThemeProvider';
+import { AuthProvider } from '@/context/AuthContext';
+import LogoutOverlay from '@/components/Auth/LogoutOverlay';
 import { ReactNode } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -18,8 +20,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} flex flex-col h-screen scrollbar-custom`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Header />
-          <EditorProvider>{children}</EditorProvider>
+          <AuthProvider>
+            <Header />
+            <EditorProvider>{children}</EditorProvider>
+            <LogoutOverlay />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

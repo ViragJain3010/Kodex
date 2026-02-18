@@ -83,15 +83,25 @@ export const authController = {
       });
 
       if (!user) {
-        return res.status(401).json({ message: 'Invalid credentials (identifier)' });
+        return res.status(401).json({ message: 'Invalid credentials' });
       }
 
       // Check password for local auth
-      if (user.authProvider === 'LOCAL') {
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-          return res.status(401).json({ message: 'Invalid credentials (password)' });
-        }
+      if (user.authProvider !== 'LOCAL') {
+        return res.status(401).json({
+          message: `Please log in using your ${user.authProvider.toLowerCase()} account.`,
+        });
+      }
+
+      if (!user.password) {
+        return res
+          .status(401)
+          .json({ message: 'Account has no password set. Please use OAuth login.' });
+      }
+
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(401).json({ message: 'Invalid credentials' });
       }
 
       // Generate tokens

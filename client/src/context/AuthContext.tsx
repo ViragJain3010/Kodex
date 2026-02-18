@@ -1,89 +1,114 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import API_BASE_URL from '@/utils/config';
+import api from '@/lib/api';
 
 interface User {
   id: string;
+  username: string;
   email: string;
-  // add other user fields if necessary
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string) => Promise<void>;
+  isLoading: boolean;
+  login: (identifier: string, password: string) => Promise<void>;
+  signup: (username: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   forgotPassword: (email: string) => Promise<void>;
+  resetPassword: (token: string, newPassword: string) => Promise<void>;
+  showsLogoutFeedback: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Check if user is logged in on initial load
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error('Failed to parse stored user', e);
+        localStorage.removeItem('user');
+      }
     }
+    setIsLoading(false);
   }, []);
 
-  const login = async (email: string, password: string) => {
-    const response = await fetch(`${API_BASE_URL}/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-    if (response.ok) {
-      const userData = await response.json();
-      setUser(userData);
-      localStorage.setItem('user', JSON.stringify(userData));
-    } else {
-      throw new Error('Login failed');
+  const login = async (identifier: string, password: string) => {
+    try {
+      const response = await api.post('/auth/login', { identifier, password });
+      const { user, accessToken, refreshToken } = response.data;
+
+      setUser(user);
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Login failed');
     }
   };
 
-  const signup = async (email: string, password: string) => {
-    const response = await fetch(`${API_BASE_URL}/signup`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-    if (response.ok) {
-      const userData = await response.json();
-      setUser(userData);
-      localStorage.setItem('user', JSON.stringify(userData));
-    } else {
-      throw new Error('Signup failed');
+  const signup = async (username: string, email: string, password: string) => {
+    try {
+      const response = await api.post('/auth/signup', { username, email, password });
+      const { user, accessToken, refreshToken } = response.data;
+
+      setUser(user);
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Signup failed');
     }
   };
+
+  const [showsLogoutFeedback, setShowsLogoutFeedback] = useState(false);
 
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem('user');
+    setShowsLogoutFeedback(true);
+    // Show feedback for 1.5s then clear state
+    setTimeout(() => {
+      setUser(null);
+      localStorage.removeItem('user');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      setShowsLogoutFeedback(false);
+    }, 1500);
   };
 
   const forgotPassword = async (email: string) => {
-    const response = await fetch(`${API_BASE_URL}/forgot-password`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
-    });
-    if (!response.ok) {
-      throw new Error('Failed to send reset password email');
+    try {
+      await api.post('/auth/forgot-password', { email });
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Failed to send reset password email');
+    }
+  };
+
+  const resetPassword = async (token: string, newPassword: string) => {
+    try {
+      await api.post('/auth/reset-password', { token, newPassword });
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Failed to reset password');
     }
   };
 
   return (
     <AuthContext.Provider
       value={{
-        user, // current logged in user
-        login, // function to log in
-        signup, // function to sign up
-        logout, // function to log out
-        forgotPassword, // function to send reset password email
+        user,
+        isLoading,
+        login,
+        signup,
+        logout,
+        forgotPassword,
+        resetPassword,
+        showsLogoutFeedback,
       }}
     >
       {children}

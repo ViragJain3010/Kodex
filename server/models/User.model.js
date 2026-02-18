@@ -5,6 +5,25 @@ const TABLE_NAME = 'users';
 
 export const User = {
   /**
+   * Helper to transform database user to API user (snake_case to camelCase)
+   */
+  _transformUser(user) {
+    if (!user) return null;
+    return {
+      id: user.id || user.id, // Knex might return it differently depending on dialect
+      username: user.username,
+      email: user.email,
+      password: user.password,
+      authProvider: user.auth_provider,
+      providerId: user.provider_id,
+      resetToken: user.reset_token,
+      resetTokenExpiry: user.reset_token_expiry,
+      createdAt: user.created_at,
+      updatedAt: user.updated_at,
+    };
+  },
+
+  /**
    * Find first user matching the where clause
    * @param {Object} whereClause - Query conditions with OR/AND support
    * @returns {Promise<Object|null>}
@@ -14,31 +33,33 @@ export const User = {
       let query = db(TABLE_NAME);
 
       if (whereClause.where) {
-        if (whereClause.where.OR) {
+        const { OR, AND, resetTokenExpiry, ...simpleWhere } = whereClause.where;
+
+        if (OR) {
           // Handle OR conditions
           query = query.where(function () {
-            whereClause.where.OR.forEach(condition => {
+            OR.forEach(condition => {
               this.orWhere(condition);
             });
           });
-        } else if (whereClause.where.AND) {
+        } else if (AND) {
           // Handle AND conditions
-          whereClause.where.AND.forEach(condition => {
+          AND.forEach(condition => {
             query = query.where(condition);
           });
         } else {
-          // Simple where condition
-          query = query.where(whereClause.where);
+          // Simple where conditions (filtered)
+          query = query.where(simpleWhere);
         }
 
         // Handle additional operators like gt (greater than)
-        if (whereClause.where.resetTokenExpiry?.gt) {
-          query = query.where('reset_token_expiry', '>', whereClause.where.resetTokenExpiry.gt);
+        if (resetTokenExpiry?.gt) {
+          query = query.where('reset_token_expiry', '>', resetTokenExpiry.gt);
         }
       }
 
       const user = await query.first();
-      return user || null;
+      return this._transformUser(user);
     } catch (error) {
       console.error('Error in User.findFirst:', error);
       throw error;
@@ -53,7 +74,7 @@ export const User = {
   async findUnique(whereClause) {
     try {
       const user = await db(TABLE_NAME).where(whereClause.where).first();
-      return user || null;
+      return this._transformUser(user);
     } catch (error) {
       console.error('Error in User.findUnique:', error);
       throw error;
@@ -82,20 +103,7 @@ export const User = {
       };
 
       const [user] = await db(TABLE_NAME).insert(userData).returning('*');
-
-      // Transform back to camelCase for API consistency
-      return {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        password: user.password,
-        authProvider: user.auth_provider,
-        providerId: user.provider_id,
-        resetToken: user.reset_token,
-        resetTokenExpiry: user.reset_token_expiry,
-        createdAt: user.created_at,
-        updatedAt: user.updated_at,
-      };
+      return this._transformUser(user);
     } catch (error) {
       console.error('Error in User.create:', error);
       throw error;
@@ -124,20 +132,7 @@ export const User = {
       };
 
       const [user] = await db(TABLE_NAME).where(where).update(updateData).returning('*');
-
-      // Transform back to camelCase
-      return {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        password: user.password,
-        authProvider: user.auth_provider,
-        providerId: user.provider_id,
-        resetToken: user.reset_token,
-        resetTokenExpiry: user.reset_token_expiry,
-        createdAt: user.created_at,
-        updatedAt: user.updated_at,
-      };
+      return this._transformUser(user);
     } catch (error) {
       console.error('Error in User.update:', error);
       throw error;
