@@ -3,10 +3,11 @@ import nodemailer from 'nodemailer';
 
 // Create a transporter using Gmail SMTP
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp-relay.brevo.com',
+  port: 587,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
+    user: process.env.BREVO_SMTP_USER,
+    pass: process.env.BREVO_SMTP_KEY,
   },
 });
 
@@ -20,7 +21,7 @@ const transporter = nodemailer.createTransport({
 export const sendPasswordResetEmail = async (email, resetLink) => {
   try {
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: '"no-reply@kodex.com" <' + process.env.EMAIL_USER + '>',
       to: email,
       subject: 'Password Reset Request',
       html: `
