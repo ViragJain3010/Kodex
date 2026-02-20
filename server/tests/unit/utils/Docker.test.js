@@ -97,7 +97,7 @@ describe('DockerRunner', () => {
       const paths = DockerRunner.getExecutionPaths(containerId);
 
       expect(paths.containerCodeDir).toContain(path.join('temp', containerId));
-      expect(paths.hostCodeDir).toBe(path.join('/home/user/Kodex', 'server', 'temp', containerId));
+      expect(paths.hostCodeDir).toBe(path.join('/home/user/Kodex', 'temp', containerId));
     });
   });
 

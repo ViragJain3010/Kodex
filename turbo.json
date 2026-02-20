@@ -2,22 +2,16 @@
   "$schema": "https://turborepo.org/schema.json",
   "tasks": {
     "lint": {
-      "outputs": []
+      "cache": true
     },
     "test": {
-      "dependsOn": ["^build"],
-      "outputs": []
+      "dependsOn": ["^build", "lint"],
+      "cache": true
     },
     "build": {
-      "outputs": [".next/**", "dist/**"]
-    },
-    "jest": {
-      "dependsOn": ["^jest"],
-      "outputs": []
-    },
-    "vitest": {
-      "dependsOn": ["^vitest"],
-      "outputs": []
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "dist/**", "out/**"],
+      "cache": true
     }
   }
 }
