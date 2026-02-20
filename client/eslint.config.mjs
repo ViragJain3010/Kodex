@@ -2,13 +2,13 @@ import globals from 'globals';
 import js from '@eslint/js';
 import pluginReact from 'eslint-plugin-react';
 import eslintPluginJest from 'eslint-plugin-jest';
+import tseslint from 'typescript-eslint';
 
-export default [
+export default tseslint.config(
   js.configs.recommended,
-  pluginReact.configs.flat.recommended,
-  pluginReact.configs.flat['jsx-runtime'],
+  ...tseslint.configs.recommended,
   {
-    files: ['**/*.{js,mjs,cjs,jsx}'],
+    files: ['**/*.{js,mjs,cjs,jsx,ts,tsx}'],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -22,9 +22,15 @@ export default [
         },
       },
     },
+    plugins: {
+      react: pluginReact,
+    },
     rules: {
+      ...pluginReact.configs.flat.recommended.rules,
+      ...pluginReact.configs.flat['jsx-runtime'].rules,
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
+      '@typescript-eslint/no-unused-vars': 'error',
     },
     settings: {
       react: {
@@ -57,5 +63,5 @@ export default [
       'build/**',
       'pnpm-lock.yaml',
     ],
-  },
-];
+  }
+);

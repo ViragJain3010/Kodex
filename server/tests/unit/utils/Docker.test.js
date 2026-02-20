@@ -93,11 +93,12 @@ describe('DockerRunner', () => {
 
     it('returns correct paths in production environment (HOST_WORK_DIR set)', () => {
       const containerId = 'test-id';
-      process.env.HOST_WORK_DIR = '/home/user/Kodex';
+      const projectRoot = path.resolve(__dirname, '..', '..', '..');
+      process.env.HOST_WORK_DIR = projectRoot;
       const paths = DockerRunner.getExecutionPaths(containerId);
 
       expect(paths.containerCodeDir).toContain(path.join('temp', containerId));
-      expect(paths.hostCodeDir).toBe(path.join('/home/user/Kodex', 'temp', containerId));
+      expect(paths.hostCodeDir).toBe(path.join(projectRoot, 'temp', containerId));
     });
   });
 
