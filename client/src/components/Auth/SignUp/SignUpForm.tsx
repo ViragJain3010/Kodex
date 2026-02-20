@@ -29,8 +29,8 @@ export default function SignupForm() {
     try {
       await signup(username, email, password);
       router.push('/dashboard');
-    } catch (err) {
-      setError('Failed to create an account');
+    } catch {
+      setError('An unexpected error occurred. Please try again.');
     }
   };
 

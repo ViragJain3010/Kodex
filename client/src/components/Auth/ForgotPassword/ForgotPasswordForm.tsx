@@ -27,8 +27,8 @@ export default function ForgotPasswordForm() {
       await forgotPassword(email);
       setMessage('Password reset email sent. Check your inbox.');
       setError('');
-    } catch (err) {
-      setError('Failed to send reset email');
+    } catch {
+      setError('An unexpected error occurred. Please try again.');
       setMessage('');
     }
   };

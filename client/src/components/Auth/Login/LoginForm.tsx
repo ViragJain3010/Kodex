@@ -28,8 +28,8 @@ export default function LoginForm() {
     try {
       await login(email, password);
       router.push('/dashboard');
-    } catch (err) {
-      setError('Failed to log in');
+    } catch {
+      setError('An unexpected error occurred. Please try again.');
     }
   };
 

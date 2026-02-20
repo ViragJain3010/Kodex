@@ -4,8 +4,11 @@
     "lint": {
       "cache": true
     },
+    "lint:check": {
+      "cache": true
+    },
     "test": {
-      "dependsOn": ["^build", "lint"],
+      "dependsOn": ["^build", "lint:check"],
       "cache": true
     },
     "build": {

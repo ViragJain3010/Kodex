@@ -58,8 +58,8 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             echo "Running selective validation for affected packages..."
-            pnpm turbo run lint test build --filter="...[${{ github.event.pull_request.base.sha }}]"
+            pnpm turbo run lint:check test build --filter="...[${{ github.event.pull_request.base.sha }}]"
           else
             echo "Running full repository validation..."
-            pnpm turbo run lint test build
+            pnpm turbo run lint:check test build
           fi

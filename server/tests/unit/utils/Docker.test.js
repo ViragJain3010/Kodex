@@ -9,20 +9,25 @@ vi.mock('uuid', () => ({
   v4: vi.fn().mockReturnValue('test-uuid'),
 }));
 vi.mock('dockerode', () => {
+  const mockModem = {
+    followProgress: vi.fn((stream, callback) => callback(null, [])),
+  };
+  const mockDocker = {
+    listImages: vi.fn().mockResolvedValue([]),
+    pull: vi.fn((tag, callback) => callback(null, {})),
+    createContainer: vi.fn().mockResolvedValue({
+      start: vi.fn().mockResolvedValue({}),
+      wait: vi.fn().mockResolvedValue({ StatusCode: 0 }),
+      logs: vi.fn().mockResolvedValue(Buffer.from('\u00010000000Hello')),
+      inspect: vi.fn().mockResolvedValue({ State: { Running: false } }),
+      stop: vi.fn().mockResolvedValue({}),
+      remove: vi.fn().mockResolvedValue({}),
+    }),
+    modem: mockModem,
+  };
   return {
     default: vi.fn().mockImplementation(function () {
-      return {
-        listImages: vi.fn().mockResolvedValue([]),
-        pull: vi.fn().mockResolvedValue({}),
-        createContainer: vi.fn().mockResolvedValue({
-          start: vi.fn().mockResolvedValue({}),
-          wait: vi.fn().mockResolvedValue({ StatusCode: 0 }),
-          logs: vi.fn().mockResolvedValue(Buffer.from('\u00010000000Hello')),
-          inspect: vi.fn().mockResolvedValue({ State: { Running: false } }),
-          stop: vi.fn().mockResolvedValue({}),
-          remove: vi.fn().mockResolvedValue({}),
-        }),
-      };
+      return mockDocker;
     }),
   };
 });

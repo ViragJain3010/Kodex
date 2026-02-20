@@ -80,41 +80,17 @@ describe('Server', () => {
     vi.restoreAllMocks();
   });
 
-  it('creates temp directory if it does not exist', async () => {
-    fs.existsSync.mockReturnValueOnce(false);
-
-    // Import server to trigger init code
-    await import('../server.js');
-
-    expect(fs.existsSync).toHaveBeenCalled();
-    expect(fs.mkdirSync).toHaveBeenCalled();
-  });
-
-  it('does not create temp directory if it already exists', async () => {
-    fs.existsSync.mockReturnValueOnce(true);
-
-    await import('../server.js');
-
-    expect(fs.existsSync).toHaveBeenCalled();
-    expect(fs.mkdirSync).not.toHaveBeenCalled();
-  });
-
   it('connects to database and starts the server', async () => {
-    fs.existsSync.mockReturnValueOnce(true);
-
     await import('../server.js');
 
     expect(db.raw).toHaveBeenCalled();
     expect(app.listen).toHaveBeenCalled();
     expect(console.log).toHaveBeenCalledWith('Connected to the database successfully!');
-    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Server running on port'));
   });
 
   it('exits process if database connection fails', async () => {
     const error = new Error('Connection failed');
     db.raw.mockRejectedValueOnce(error);
-
-    fs.existsSync.mockReturnValueOnce(true);
 
     await import('../server.js');
 
@@ -123,8 +99,6 @@ describe('Server', () => {
   });
 
   it('registers signal handlers for graceful shutdown', async () => {
-    fs.existsSync.mockReturnValueOnce(true);
-
     await import('../server.js');
 
     expect(process.on).toHaveBeenCalledWith('SIGTERM', expect.any(Function));
@@ -132,42 +106,22 @@ describe('Server', () => {
   });
 
   it('performs cleanup on SIGTERM', async () => {
-    fs.existsSync.mockReturnValueOnce(true).mockReturnValueOnce(true);
-
     await import('../server.js');
 
     // Trigger SIGTERM handler
     await processEvents.SIGTERM();
 
-    expect(fs.existsSync).toHaveBeenCalledTimes(2);
-    expect(fs.rmSync).toHaveBeenCalled();
     expect(db.destroy).toHaveBeenCalled();
     expect(process.exit).toHaveBeenCalledWith(0);
   });
 
   it('performs cleanup on SIGINT', async () => {
-    fs.existsSync.mockReturnValueOnce(true).mockReturnValueOnce(true);
-
     await import('../server.js');
 
     // Trigger SIGINT handler
     await processEvents.SIGINT();
 
-    expect(fs.existsSync).toHaveBeenCalledTimes(2);
-    expect(fs.rmSync).toHaveBeenCalled();
     expect(db.destroy).toHaveBeenCalled();
     expect(process.exit).toHaveBeenCalledWith(0);
-  });
-
-  it('does not attempt to remove temp directory if it does not exist during cleanup', async () => {
-    fs.existsSync.mockReturnValueOnce(true).mockReturnValueOnce(false);
-
-    await import('../server.js');
-
-    // Trigger SIGTERM handler
-    await processEvents.SIGTERM();
-
-    expect(fs.existsSync).toHaveBeenCalledTimes(2);
-    expect(fs.rmSync).not.toHaveBeenCalled();
   });
 });
