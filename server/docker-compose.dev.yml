@@ -1,13 +1,13 @@
 services:
   server:
-    image: ${DOCKER_USERNAME}/kodex-server:latest
+    image: ${DOCKER_USERNAME}/kodex-server:dev
     container_name: kodex-server
     restart: always
     ports:
       - "3001:3001"
     environment:
-      - PORT=3001
       - NODE_ENV=${NODE_ENV}
+      - PORT=3001
       - DATABASE_URI=${DATABASE_URI}
       - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
       - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
@@ -22,8 +22,7 @@ services:
       - DOCKER_USERNAME=${DOCKER_USERNAME}
       # The network name used by the backend to create runner containers
       - DOCKER_NETWORK=code-network
-      # Allow using specific tags (dev/latest/etc) from host env
-      - DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG:-latest}
+      - DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG:-dev}
     volumes:
       # Allow server to talk to Host Docker Daemon
       - /var/run/docker.sock:/var/run/docker.sock
@@ -38,21 +37,21 @@ services:
 
   # Runner images - defining them here with 'pull_policy: always' ensures they are pulled
   javascript-runner:
-    image: ${DOCKER_USERNAME}/code-executor-javascript:${DOCKER_IMAGE_TAG:-latest}
+    image: ${DOCKER_USERNAME}/code-executor-javascript:dev
     pull_policy: always
     command: ["/bin/true"] 
     networks:
       - code-network
 
   python-runner:
-    image: ${DOCKER_USERNAME}/code-executor-python:${DOCKER_IMAGE_TAG:-latest}
+    image: ${DOCKER_USERNAME}/code-executor-python:dev
     pull_policy: always
     command: ["/bin/true"]
     networks:
       - code-network
 
   cpp-runner:
-    image: ${DOCKER_USERNAME}/code-executor-cpp:${DOCKER_IMAGE_TAG:-latest}
+    image: ${DOCKER_USERNAME}/code-executor-cpp:dev
     pull_policy: always
     command: ["/bin/true"]
     networks:

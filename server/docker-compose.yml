@@ -14,7 +14,7 @@ services:
     networks:
       - code-network
     volumes:
-      - ./temp:/app/temp 
+      - ../temp:/app/temp 
     tty: true
     stdin_open: true
 
@@ -30,7 +30,7 @@ services:
     networks:
       - code-network
     volumes:
-      - ./temp:/app/temp
+      - ../temp:/app/temp
 
   cpp-runner:
     build:
@@ -44,7 +44,7 @@ services:
     networks:
       - code-network
     volumes:
-      - ./temp:/app/temp
+      - ../temp:/app/temp
 
 networks:
   code-network:

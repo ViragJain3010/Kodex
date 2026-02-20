@@ -2,25 +2,9 @@
 // npm start -> Starts the seperate backend server
 
 import app from './api/index.js';
-import path from 'path';
-import fs from 'fs';
 import db from './config/db.js';
 
-import { fileURLToPath } from 'url';
-
-// Get the current directory using import.meta.url
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const PORT = process.env.PORT || 3001;
-
-// Create temp directory for code files if it doesn't exist
-const tempDir = path.join(__dirname, 'temp');
-if (!fs.existsSync(tempDir)) {
-  fs.mkdirSync(tempDir, { recursive: true });
-}
-// Ensure the temp directory remains accessible to runner containers
-fs.chmodSync(tempDir, 0o777);
 
 // Function to start the server
 async function startServer() {
@@ -43,9 +27,6 @@ async function startServer() {
 // Cleanup function on shutdown
 async function cleanup() {
   console.log('Performing cleanup...');
-  if (fs.existsSync(tempDir)) {
-    fs.rmSync(tempDir, { recursive: true, force: true });
-  }
   await db.destroy(); // Destroy Knex connection pool
   console.log('Cleanup completed. Exiting.');
   process.exit(0);

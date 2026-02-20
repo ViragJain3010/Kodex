@@ -28,13 +28,12 @@ module.exports = {
       [
         "client",
         "server",
-        "docker",
-        "terminal",
-        "wasm",
+        "platform",
         "tests",
         "none",
       ],
     ],
+    "subject-case": [2, "always", ["sentence-case", "lower-case"]],
   },
   prompt: {
     messages: {
@@ -76,7 +75,7 @@ module.exports = {
             emoji: "📦",
           },
           perf: {
-            description: "Performance improvements",
+            description: "Performance improvements or optimisations",
             title: "Performance",
             emoji: "🚀",
           },
@@ -112,10 +111,10 @@ module.exports = {
       },
       subject: {
         description:
-          "Write a short, imperative tense description of the change:",
+          "Write a short, imperative description of the change:",
       },
       body: {
-        description: "Provide a longer description of the change (optional):",
+        description: "Provide detailed description of the change (optional):",
       },
       isBreaking: {
         description: "Are there any breaking changes?",
