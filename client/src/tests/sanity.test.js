@@ -1,5 +1,5 @@
 describe('Sanity test', () => {
-  it('should pass', () => {
-    expect(true).toBe(true);
+  it('should fail as expected for Scenario 2', () => {
+    expect(true).toBe(false);
   });
 });
