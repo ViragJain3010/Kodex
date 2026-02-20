@@ -1,6 +1,6 @@
 FROM node:18-alpine
 
-# Install common utilities
+# Install essential utilities
 RUN apk add --no-cache \
     bash \
     coreutils \
@@ -15,11 +15,13 @@ RUN addgroup -S coderunner && \
     adduser -S coderunner -G coderunner && \
     chown -R coderunner:coderunner /app
 
-# Copy run script and ensure proper line endings
+# Copy run script and set permissions
 COPY run.sh /run.sh
-RUN dos2unix /run.sh || true && \
-    chmod +x /run.sh && \
+RUN chmod +x /run.sh && \
     chown coderunner:coderunner /run.sh
 
+# Switch to non-root user
 USER coderunner
+
+# Specify the entrypoint
 ENTRYPOINT ["/bin/bash", "/run.sh"]

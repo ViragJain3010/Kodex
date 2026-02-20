@@ -21,7 +21,8 @@ class DockerRunner {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
     this.serverRoot = path.resolve(__dirname, '..');
-    this.tempBaseDir = path.join(this.serverRoot, 'temp');
+    // Standardize to project root temp folder
+    this.tempBaseDir = path.resolve(this.serverRoot, '..', 'temp');
   }
 
   /**
@@ -32,7 +33,7 @@ class DockerRunner {
   getExecutionPaths(containerId) {
     const containerCodeDir = path.join(this.tempBaseDir, containerId);
 
-    // HOST_WORK_DIR should point to the directory on the host where the 'temp' folder is located.
+    // HOST_WORK_DIR points to the root 'Kodex' directory on the host.
     const hostWorkDir = process.env.HOST_WORK_DIR;
     const hostCodeDir = hostWorkDir
       ? path.join(hostWorkDir, 'temp', containerId)
@@ -141,9 +142,9 @@ class DockerRunner {
 
     // Construct full image name
     const dockerUsername = process.env.DOCKER_USERNAME;
-    const imageTag = dockerUsername
-      ? `${dockerUsername}/${dockerConfig.image}:latest`
-      : `${dockerConfig.image}:latest`;
+    const imageTagPrefix = dockerUsername ? `${dockerUsername}/` : '';
+    const imageTagSuffix = process.env.DOCKER_IMAGE_TAG || 'latest';
+    const imageTag = `${imageTagPrefix}${dockerConfig.image}:${imageTagSuffix}`;
 
     // Container configuration
     const containerConfig = {
@@ -159,6 +160,8 @@ class DockerRunner {
         AutoRemove: false,
         NetworkMode: process.env.DOCKER_NETWORK || 'code-network',
       },
+      // Essential Permission Fix: Run as the host user in Dev to avoid 'Root Folder' issues
+      // User: process.env.NODE_ENV !== 'production' ? `${process.getuid()}:${process.getgid()}` : undefined,
     };
 
     // Ensure image exists
@@ -167,7 +170,16 @@ class DockerRunner {
 
     if (!imageExists) {
       console.log(`Image ${imageTag} not found locally, attempting to pull...`);
-      await this.docker.pull(imageTag);
+      await new Promise((resolve, reject) => {
+        this.docker.pull(imageTag, (err, stream) => {
+          if (err) return reject(err);
+          this.docker.modem.followProgress(stream, (err, output) => {
+            if (err) return reject(err);
+            resolve(output);
+          });
+        });
+      });
+      console.log(`Image ${imageTag} pulled successfully.`);
     }
 
     const container = await this.docker.createContainer(containerConfig);

@@ -1,12 +1,43 @@
+# Standard exclusions
 node_modules
-npm-debug.log
+.env
 Dockerfile
 .dockerignore
-.git
-.gitignore
-.env
+pnpm-lock.yaml
+
+# Build and temp
 temp
 dist
 build
+coverage
+
+# Development and Configs
+.git
+.gitignore
+eslint.config.js
+vitest.config.js
+README.md
+LICENSE
+docs
+
+# Docker & Deployment files
+docker-compose.yml
+docker-compose.prod.yml
+docker-compose.dev.yml
+prod/
+docker/
+
+# Tests
+tests/
+__tests__/
+*.test.js
+*.spec.js
+
+# Logs and debug
+npm-debug.log
+yarn-debug.log
+yarn-error.log
 .DS_Store
-scripts/build_and_push.sh
+
+# Scripts
+scripts/

@@ -77,7 +77,7 @@ const languages = {
       image: 'code-executor-cpp',
       workDir: '/app',
       timeout: 15000,
-      memory: '128mb',
+      memory: '256mb',
       cpus: '0.5',
     },
     execution: {

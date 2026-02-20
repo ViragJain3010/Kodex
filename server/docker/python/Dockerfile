@@ -1,7 +1,6 @@
-# Use the Python 3.9 Alpine image
 FROM python:3.9-alpine
 
-# Install common utilities
+# Install essential utilities
 RUN apk add --no-cache \
     bash \
     coreutils \
@@ -18,10 +17,11 @@ RUN addgroup -S coderunner && \
 
 # Copy run script and set permissions
 COPY run.sh /run.sh
-RUN dos2unix /run.sh && chmod +x /run.sh
+RUN chmod +x /run.sh && \
+    chown coderunner:coderunner /run.sh
 
 # Switch to non-root user
 USER coderunner
 
-# Use sh to run the entrypoint script
-ENTRYPOINT ["/bin/sh", "/run.sh"]
+# Use bash for consistency if available, otherwise sh
+ENTRYPOINT ["/bin/bash", "/run.sh"]
