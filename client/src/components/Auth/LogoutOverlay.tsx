@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { LogOut, CheckCircle2 } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 export default function LogoutOverlay() {

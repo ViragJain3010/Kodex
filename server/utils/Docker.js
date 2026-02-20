@@ -20,9 +20,8 @@ class DockerRunner {
     // Base directories
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
-    this.serverRoot = path.resolve(__dirname, '..');
-    // Standardize to project root temp folder
-    this.tempBaseDir = path.resolve(this.serverRoot, '..', 'temp');
+    this.projectRoot = path.resolve(__dirname, '..', '..');
+    this.tempBaseDir = path.join(this.projectRoot, 'temp');
   }
 
   /**

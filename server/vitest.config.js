@@ -7,7 +7,7 @@ export default defineConfig({
     environment: 'node',
     globals: true,
   },
-  include: ['**/tests/**/*.{test,spec}.js'],
+  include: ['./tests/**/*.{test,spec}.js'],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '.'), // Maps @ to the root directory (server)

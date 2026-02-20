@@ -4,7 +4,7 @@ import { useCode, useCodeActions } from '@/context/editor/EditorContentContext';
 import { useEditorSettings } from '@/context/editor/EditorSettingsContext';
 import { useSnippet } from '@/context/editor/SnippetContext';
 import { useSnippetActions } from '@/context/editor/SnippetContext';
-import { useEffect, useCallback, memo } from 'react';
+import React, { useCallback, memo } from 'react';
 
 import EditorSkeleton from '../Loader/EditorSkeleton';
 

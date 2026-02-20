@@ -42,8 +42,8 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
       } else {
         setError(data.message);
       }
-    } catch (error) {
-      setError('Error resetting password');
+    } catch {
+      setError('An unexpected error occurred. Please try again.');
     }
   };
 
