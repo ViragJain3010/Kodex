@@ -5,14 +5,14 @@ import passport from 'passport';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import User from '../models/User.model.js';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET || 'your-access-secret-key';
 
 // JWT Strategy
 passport.use(
   new JwtStrategy(
     {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: JWT_SECRET,
+      secretOrKey: JWT_ACCESS_SECRET,
     },
     async (jwtPayload, done) => {
       try {

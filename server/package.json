@@ -5,7 +5,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "node server.js",
+    "start": "node server.js",
+    "dev": "nodemon server.js",
     "lint": "eslint --fix --quiet && prettier --write \"**/*.{js,ts,json}\"",
     "lint:check": "eslint --quiet && prettier --check \"**/*.{js,ts,json}\"",
     "test": "turbo run vitest -- run",
