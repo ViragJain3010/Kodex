@@ -8,6 +8,7 @@ import executeRouter from './routes/execute.routes.js';
 import testRoutes from './routes/test.js';
 import languagesRoutes from './routes/languages.routes.js';
 import snippetRoutes from './routes/snippet.routes.js';
+import aiRoutes from './routes/ai.routes.js';
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use('/api', executeRouter);
 app.use('/api', testRoutes);
 app.use('/api', languagesRoutes);
 app.use('/api', snippetRoutes);
+app.use('/api', aiRoutes);
 
 /* eslint-disable no-unused-vars */
 // Error handling middleware

@@ -81,3 +81,71 @@
 .scrollbar-custom::-webkit-scrollbar-thumb:hover {
   background: rgb(34 211 238);
 }
+
+@keyframes shimmer-v {
+  /* First shimmer: smooth pass */
+  0% {
+    background-position: 0 110%;
+  }
+  6% {
+    background-position: 0 -30%;
+  }
+
+  /* Stay finished for a moment to prevent 'backwards' look */
+  7% {
+    background-position: 0 -30%;
+  }
+
+  /* Instant jump back to start (invisible repositioning) */
+  7.01% {
+    background-position: 0 110%;
+  }
+
+  /* Pause at start state */
+  7.3% {
+    background-position: 0 110%;
+  }
+
+  /* Second shimmer: faster swipe */
+  11% {
+    background-position: 0 -30%;
+  }
+
+  /* Long idle/pause */
+  100% {
+    background-position: 0 -30%;
+  }
+}
+
+.animate-shimmer-text {
+  /* Theme variables - Light mode defaults */
+  --shimmer-base: #4b5563; /* gray-600 */
+  --shimmer-mid: #9ca3af; /* gray-400 */
+  --shimmer-shine: #ffffff;
+
+  background: linear-gradient(
+    to bottom,
+    var(--shimmer-base) 0%,
+    var(--shimmer-mid) 40%,
+    var(--shimmer-shine) 50%,
+    var(--shimmer-mid) 60%,
+    var(--shimmer-base) 100%
+  );
+
+  background-size: 100% 300%;
+  background-position: 0 110%;
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: shimmer-v 15s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  display: block;
+  position: relative;
+}
+
+.dark .animate-shimmer-text {
+  --shimmer-base: #adabab; /* gray-300 */
+  --shimmer-mid: #bab6b6; /* gray-100 */
+  --shimmer-shine: #ffffff;
+}
